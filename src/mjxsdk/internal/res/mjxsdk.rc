@@ -1,0 +1,45 @@
+// mjxsdk.rc
+
+// Copyright (c) Mateusz Jandura. All rights reserved.
+// SPDX-License-Identifier: Apache-2.0
+
+#include <Windows.h>
+
+// Declare the resource language as English (United States) with UTF-8 code page.
+// The code page specification is crucial for proper interpretation of characters,
+// ensuring correct display of special characters like the copyright sign.
+LANGUAGE LANG_ENGLISH, SUBLANG_NEUTRAL
+#pragma code_page(65001)
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION    1, 0, 0, 0
+PRODUCTVERSION 1, 0, 0, 0
+FILEFLAGSMASK  0x3FL
+#ifdef _DEBUG
+FILEFLAGS      VS_FF_DEBUG
+#else // ^^^ _DEBUG ^^^ / vvv NDEBUG vvv
+FILEFLAGS      0x00L
+#endif // _DEBUG
+FILEOS         VOS_NT_WINDOWS32
+FILETYPE       VFT_DLL
+FILESUBTYPE    0x00L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName",      "Mateusz Jandura"
+            VALUE "FileDescription",  "MJX Software Development Kit"
+            VALUE "FileVersion",      "1.0.0.0"
+            VALUE "InternalName",     "mjxsdk.dll"
+            VALUE "LegalCopyright",   "Copyright © Mateusz Jandura. All rights reserved."
+            VALUE "OriginalFilename", "mjxsdk.dll"
+            VALUE "ProductName",      "MJX Software Development Kit"
+            VALUE "ProductVersion",   "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END
