@@ -1,0 +1,11 @@
+# .gitmodules
+
+# Copyright (c) Mateusz Jandura. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+[submodule "benchmarks/google-benchmark"]
+	path = benchmarks/google-benchmark
+	url = https://github.com/google/benchmark.git
+[submodule "tests/google-test"]
+	path = tests/google-test
+	url = https://github.com/google/googletest.git
