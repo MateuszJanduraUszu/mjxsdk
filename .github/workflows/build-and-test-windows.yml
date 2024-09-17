@@ -1,0 +1,82 @@
+# build-and-test-windows.yml
+
+# Copyright (c) Mateusz Jandura. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+name: Build and test (Windows)
+on:
+  push:
+    paths-ignore:
+      - '**/**.md'
+      
+jobs:
+  build-and-test:
+    # Note: As pull requests are required before merging, workflows already run during review.
+    #       Thus, 'main' branch pushes are skipped.
+    if: ${{ github.ref_name != 'main' }}
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        compiler: [Clang, GCC, MSVC]
+        arch: [x64, x86]
+        config: [Debug, Release]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update submodules
+        run: |
+          git submodule update --init --recursive
+
+      - name: Install Ninja
+        uses: turtlesec-no/get-ninja@main
+
+      # Note: Unlike GCC, Clang (with the MSVC toolchain) and MSVC require specific environment variables to
+      #       be set for their tools to be properly found and used. This configuration ensures that the MSVC
+      #       tools' paths are correctly recognized. If these environment variables are not set,
+      #       the MSVC tools may not be found or used correctly, even if they are installed on the system.
+      - name: Setup compiler toolchain
+        if: ${{ matrix.compiler == 'Clang' || matrix.compiler == 'MSVC' }}
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ matrix.arch }}
+          vsversion: 2022
+
+      - name: Configure project (x64 Clang)
+        if: ${{ matrix.compiler == 'Clang' && matrix.arch == 'x64' }}
+        run: >
+          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+          -DCMAKE_C_FLAGS="-target x86_64-pc-windows-msvc" -DCMAKE_CXX_FLAGS="-target x86_64-pc-windows-msvc"
+          -DMJXSDK_BUILD_BENCHMARKS=ON -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
+
+      - name: Configure project (x86 Clang)
+        if: ${{ matrix.compiler == 'Clang' && matrix.arch == 'x86' }}
+        run: >
+          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+          -DCMAKE_C_FLAGS="-target i386-pc-windows-msvc" -DCMAKE_CXX_FLAGS="-target i386-pc-windows-msvc"
+          -DMJXSDK_BUILD_BENCHMARKS=ON -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
+
+      - name: Configure project (GCC)
+        if: ${{ matrix.compiler == 'GCC' }}
+        run: >
+          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
+          -DMJXSDK_BUILD_BENCHMARKS=ON -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
+
+      - name: Configure project (MSVC)
+        if: ${{ matrix.compiler == 'MSVC' }}
+        run: >
+          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl
+          -DMJXSDK_BUILD_BENCHMARKS=ON -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
+
+      - name: Build project
+        run: |
+          cmake --build build/${{ matrix.arch }} --preset=${{ matrix.arch }} --config ${{ matrix.config }}
+
+      - name: Install project
+        run: |
+          cmake --install build/${{ matrix.arch }} --config ${{ matrix.config }}
+
+      - name: Run tests
+        run: |
+          ctest --test-dir build/${{ matrix.arch }}/tests --output-on-failure -C ${{ matrix.config }}
