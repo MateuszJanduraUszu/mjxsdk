@@ -1,0 +1,52 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 21,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "generator": "Ninja Multi-Config",
+            "binaryDir": "${sourceDir}/build/${presetName}"
+        },
+        {
+            "name": "x64",
+            "inherits": "base",
+            "description": "x64 Ninja Configuration",
+            "architecture": {
+                "strategy": "external",
+                "value": "x64"
+            },
+            "cacheVariables": {
+                "MJX_PLATFORM_ARCH": "x64"
+            }
+        },
+        {
+            "name": "x86",
+            "inherits": "base",
+            "description": "x86 Ninja Configuration",
+            "architecture": {
+                "strategy": "external",
+                "value": "x86"
+            },
+            "cacheVariables": {
+                "MJX_PLATFORM_ARCH": "x86"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "x64",
+            "description": "Build x64 MJX SDK",
+            "configurePreset": "x64"
+        },
+        {
+            "name": "x86",
+            "description": "Build x86 MJX SDK",
+            "configurePreset": "x86"
+        }
+    ]
+}
