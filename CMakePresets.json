@@ -40,12 +40,12 @@
     "buildPresets": [
         {
             "name": "x64",
-            "description": "Build x64 MJX SDK",
+            "description": "Build x64 MJXSDK",
             "configurePreset": "x64"
         },
         {
             "name": "x86",
-            "description": "Build x86 MJX SDK",
+            "description": "Build x86 MJXSDK",
             "configurePreset": "x86"
         }
     ]

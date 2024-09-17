@@ -9,7 +9,7 @@
 namespace mjx {
     void test_encode_decode(const uint64_t _Major, const uint64_t _Minor, const uint64_t _Patch) noexcept {
         // encode the specified version into a 64-bit integer, and subsequently decode it
-        // to validate the extracted version numbers.
+        // to validate the extracted version numbers
         const uint64_t _Version = _MJX_ENCODE_VERSION(_Major, _Minor, _Patch);
         EXPECT_EQ(_MJX_DECODE_VERSION_MAJOR(_Version), _Major);
         EXPECT_EQ(_MJX_DECODE_VERSION_MINOR(_Version), _Minor);
