@@ -22,5 +22,16 @@ function(add_isolated_test test_name test_path)
     add_test(NAME ${test_name} COMMAND ${test_name})
 endfunction()
 
-# Currently, there are no compatible tests. However, the main build component
-# has been implemented. Once sufficient progress is made, tests will be added here.
+add_isolated_test(test_version_encoding "src/version_encoding/test.cpp")
+
+# use a custom target to combine all targets into a single one,
+# this allows only one post-build call instead of per-test copying
+add_custom_target(mjxsdk_and_tests ALL DEPENDS
+    mjxsdk
+    test_version_encoding
+)
+add_custom_command(TARGET mjxsdk_and_tests POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "$<TARGET_FILE:mjxsdk>"
+    "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>" # copy to the tests' output directory
+)
