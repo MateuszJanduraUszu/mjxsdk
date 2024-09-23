@@ -33,6 +33,20 @@ jobs:
         run: |
           sudo apt-get install ninja-build
 
+      - name: Set up Clang
+        if: ${{ matrix.complier == 'Clang' }}
+        uses: egor-tensin/setup-clang@v1
+        with:
+          version: latest
+          platform: ${{ matrix.arch }}
+
+      - name: Set up GCC
+        if: ${{ matrix.compiler == 'GCC' }}
+        uses: egor-tensin/setup-gcc@v1
+        with:
+          version: latest
+          platform: ${{ matrix.arch }}
+
       - name: Configure project (Clang)
         if: ${{ matrix.compiler == 'Clang' }}
         run: >
