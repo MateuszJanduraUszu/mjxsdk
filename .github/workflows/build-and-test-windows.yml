@@ -44,7 +44,7 @@ jobs:
         uses: egor-tensin/setup-mingw@v2
         with:
           platform: ${{ matrix.arch }}
-          version: 13.2.0 # workaround
+          version: 12.2.0 # workaround
 
       # Note: Since Clang utilizes the MSVC toolchain on Windows, the setup process includes
       #       configuring the toolchain for both Clang and MSVC.
