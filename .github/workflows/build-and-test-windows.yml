@@ -55,10 +55,20 @@ jobs:
           arch: ${{ matrix.arch }}
           vsversion: 2022
 
-      - name: Configure project (Clang)
-        if: ${{ matrix.compiler == 'Clang' }}
+      - name: Configure project (x64 Clang)
+        if: ${{ matrix.compiler == 'Clang' && matrix.arch == 'x64' }}
         run: >
           cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+          -DMJXSDK_BUILD_BENCHMARKS=ON -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
+          
+      # Note: The operating system image is typically 64-bit, and Clang is almost always installed
+      #       as a 64-bit version. Therefore, to ensure 32-bit compilation, the target architecture
+      #       must be explicitly specified.
+      - name: Configure project (x86 Clang)
+        if: ${{ matrix.compiler == 'Clang' && matrix.arch == 'x86' }}
+        run: >
+          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+          -DCMAKE_C_FLAGS="-target i686-pc-windows-msvc" -DCMAKE_CXX_FLAGS="-target i686-pc-windows-msvc"
           -DMJXSDK_BUILD_BENCHMARKS=ON -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
 
       - name: Configure project (GCC)
