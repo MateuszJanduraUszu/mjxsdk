@@ -1,0 +1,72 @@
+# build-and-test-linux.yml
+
+# Copyright (c) Mateusz Jandura. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+name: Build and test (Linux)
+on:
+  push:
+    paths-ignore:
+      - '**/**.md'
+      
+jobs:
+  build-and-test:
+    # Note: As pull requests are required before merging, workflows already run during review.
+    #       Thus, 'main' branch pushes are skipped.
+    if: ${{ github.ref_name != 'main' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [Clang, GCC]
+        arch: [x64, x86]
+        config: [Debug, Release]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update submodules
+        run: |
+          git submodule update --init --recursive
+
+      - name: Install Ninja
+        run: |
+          sudo apt-get install ninja-build
+
+      - name: Set up Clang
+        if: ${{ matrix.compiler == 'Clang' }}
+        uses: egor-tensin/setup-clang@v1
+        with:
+          version: latest
+          platform: ${{ matrix.arch }}
+
+      - name: Set up GCC
+        if: ${{ matrix.compiler == 'GCC' }}
+        uses: egor-tensin/setup-gcc@v1
+        with:
+          version: latest
+          platform: ${{ matrix.arch }}
+
+      - name: Configure project (Clang)
+        if: ${{ matrix.compiler == 'Clang' }}
+        run: >
+          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+          -DMJXSDK_BUILD_BENCHMARKS=ON -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
+
+      - name: Configure project (GCC)
+        if: ${{ matrix.compiler == 'GCC' }}
+        run: >
+          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
+          -DMJXSDK_BUILD_BENCHMARKS=ON -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
+
+      - name: Build project
+        run: |
+          cmake --build build/${{ matrix.arch }} --preset=${{ matrix.arch }} --config ${{ matrix.config }}
+
+      - name: Install project
+        run: |
+          cmake --install build/${{ matrix.arch }} --config ${{ matrix.config }}
+
+      - name: Run tests
+        run: |
+          ctest --test-dir build/${{ matrix.arch }}/tests --output-on-failure -C ${{ matrix.config }}
