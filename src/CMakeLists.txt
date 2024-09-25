@@ -6,12 +6,14 @@
 cmake_minimum_required(VERSION 3.21.0)
 
 set(MJXSDK_INC_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/core.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/exception.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/export.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/version.hpp"
 )
 set(MJXSDK_SRC_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/allocator.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/exception.cpp"
 )
 set(MJXSDK_IMPL_FILES
