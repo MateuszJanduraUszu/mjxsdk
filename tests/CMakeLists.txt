@@ -22,12 +22,14 @@ function(add_isolated_test test_name test_path)
     add_test(NAME ${test_name} COMMAND ${test_name})
 endfunction()
 
+add_isolated_test(test_allocators_compatibility "src/allocators_compatibility/test.cpp")
 add_isolated_test(test_version_encoding "src/version_encoding/test.cpp")
 
 # use a custom target to combine all targets into a single one,
 # this allows only one post-build call instead of per-test copying
 add_custom_target(mjxsdk_and_tests ALL DEPENDS
     mjxsdk
+    test_allocators_compatibility
     test_version_encoding
 )
 add_custom_command(TARGET mjxsdk_and_tests POST_BUILD
