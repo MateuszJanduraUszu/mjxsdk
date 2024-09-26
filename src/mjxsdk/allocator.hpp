@@ -9,9 +9,10 @@
 #include <cstddef>
 #include <mjxsdk/core.hpp>
 #include <mjxsdk/export.hpp>
+#include <type_traits>
 
 namespace mjx {
-    class _MJX_NOVTABLE _MJXSDK_EXPORT allocator { // base class for all allocators
+    class _MJXSDK_EXPORT _MJX_NOVTABLE allocator { // base class for all allocators
     public:
         using value_type      = void;
         using size_type       = size_t;
@@ -26,18 +27,11 @@ namespace mjx {
         allocator& operator=(const allocator& _Other) noexcept;
         allocator& operator=(allocator&& _Other) noexcept;
 
-        // allocates uninitialized storage
-        virtual pointer allocate(const size_type _Count) = 0;
+        // allocates uninitialized storage with optional alignment
+        virtual pointer allocate(size_type _Count, const size_type _Align = 0) = 0;
 
-        // allocates uninitialized storage with the specifed alignment
-        virtual pointer allocate_aligned(const size_type _Count, const size_type _Align) = 0;
-
-        // deallocates storage
-        virtual void deallocate(pointer _Ptr, const size_type _Count) noexcept = 0;
-
-        // deallocates aligned storage
-        virtual void deallocate_aligned(
-            pointer _Ptr, const size_type _Count, const size_type _Align) noexcept = 0;
+        // deallocates storage with optional alignment
+        virtual void deallocate(pointer _Ptr, size_type _Count, const size_type _Align = 0) noexcept = 0;
 
         // returns the largest supported allocation size
         virtual size_type max_size() const noexcept = 0;
@@ -47,6 +41,15 @@ namespace mjx {
     };
 
     _MJXSDK_EXPORT bool operator==(const allocator& _Left, const allocator& _Right) noexcept;
+
+    template <class _Alloc>
+    inline constexpr bool is_compatible_allocator_v = ::std::is_base_of_v<allocator, _Alloc>;
+
+    template <class _Alloc>
+    struct is_compatible_allocator : ::std::bool_constant<is_compatible_allocator_v<_Alloc>> {};
+
+    template <class _Alloc>
+    concept compatible_allocator = is_compatible_allocator_v<_Alloc>;
 } // namespace mjx
 
 #endif // _MJXSDK_ALLOCATOR_HPP_
