@@ -5,6 +5,7 @@
 
 #include <gtest/gtest.h>
 #include <mjxsdk/allocator.hpp>
+#include <mjxsdk/native_allocator.hpp>
 
 namespace mjx {
     class comp_allocator : public allocator {
@@ -77,6 +78,10 @@ namespace mjx {
             return true;
         }
     };
+
+    TEST(allocators_compatibility, builtin_allocators) {
+        EXPECT_TRUE(is_compatible_allocator_v<native_allocator>);
+    }
 
     TEST(allocators_compatibility, custom_allocators) {
         EXPECT_TRUE(is_compatible_allocator_v<comp_allocator>);
