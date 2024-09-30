@@ -63,7 +63,7 @@ namespace mjx {
         size_t* _Myctr = nullptr;
     };
 
-    TEST(global_allocator, set) {
+    TEST(global_allocator, use_custom_allocator) {
         constexpr size_t _Expected_counter = 4;
         size_t _Counter                    = 0;
         custom_allocator _Al;
