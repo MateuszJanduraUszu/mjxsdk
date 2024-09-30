@@ -47,17 +47,33 @@ jobs:
           version: latest
           platform: ${{ matrix.arch }}
 
-      - name: Configure project (Clang)
-        if: ${{ matrix.compiler == 'Clang' }}
+      - name: Configure project (x64 Clang)
+        if: ${{ matrix.compiler == 'Clang' && matrix.arch == 'x64' }}
         run: >
           cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+          -DCMAKE_C_FLAGS="-target x86_64-pc-linux-gnu" -DCMAKE_CXX_FLAGS="-target x86_64-pc-linux-gnu"
           -DMJXSDK_BUILD_BENCHMARKS=ON -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
 
-      - name: Configure project (GCC)
-        if: ${{ matrix.compiler == 'GCC' }}
+      - name: Configure project (x86 Clang)
+        if: ${{ matrix.compiler == 'Clang' && matrix.arch == 'x86' }}
+        run: >
+          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+          -DCMAKE_C_FLAGS="-target i686-pc-linux-gnu" -DCMAKE_CXX_FLAGS="-target i686-pc-linux-gnu"
+          -DMJXSDK_BUILD_BENCHMARKS=ON -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
+
+      - name: Configure project (x64 GCC)
+        if: ${{ matrix.compiler == 'GCC' && matrix.arch == 'x64' }}
         run: >
           cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
-          -DMJXSDK_BUILD_BENCHMARKS=ON -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
+          -DCMAKE_C_FLAGS="-m64" -DCMAKE_CXX_FLAGS="-m64" -DMJXSDK_BUILD_BENCHMARKS=ON
+          -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
+
+      - name: Configure project (x86 GCC)
+        if: ${{ matrix.compiler == 'GCC' && matrix.arch == 'x86' }}
+        run: >
+          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
+          -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" -DMJXSDK_BUILD_BENCHMARKS=ON
+          -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
 
       - name: Build project
         run: |
