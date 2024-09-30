@@ -62,14 +62,14 @@ jobs:
           -DCMAKE_C_FLAGS="-target i686-pc-linux-gnu" -DCMAKE_CXX_FLAGS="-target i686-pc-linux-gnu"
 
       - name: Configure project (x64 GCC)
-        if: ${{ matrix.compiler == 'GCC' }}
+        if: ${{ matrix.compiler == 'GCC' && matrix.arch == 'x64' }}
         run: >
           cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
           -DMJXSDK_BUILD_BENCHMARKS=ON -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON
           -DCMAKE_C_FLAGS="-m64" -DCMAKE_CXX_FLAGS="-m64"
 
       - name: Configure project (x86 GCC)
-        if: ${{ matrix.compiler == 'GCC' }}
+        if: ${{ matrix.compiler == 'GCC' && matrix.arch == 'x86' }}
         run: >
           cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
           -DMJXSDK_BUILD_BENCHMARKS=ON -DMJXSDK_BUILD_TESTS=ON -DMJXSDK_INSTALL_LIBRARY=ON

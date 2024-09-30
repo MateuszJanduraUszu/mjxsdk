@@ -30,7 +30,8 @@ jobs:
           git submodule update --init --recursive
 
       - name: Install Ninja
-        uses: turtlesec-no/get-ninja@main
+        run: |
+          choco install ninja
 
       - name: Set up Clang
         if: ${{ matrix.compiler == 'Clang' }}
