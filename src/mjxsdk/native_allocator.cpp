@@ -39,11 +39,7 @@ namespace mjx {
             _Count = mjxsdk_impl::_Align_value(_Count, _Align);
         }
 
-#ifdef _MJX_CLANG
-        void* const _Ptr = ::operator new(_Count); // 'nothrow' overload not recognized in Clang
-#else // ^^^ Clang ^^^ / vvv GCC or MSVC vvv
         void* const _Ptr = ::operator new(_Count, ::std::nothrow);
-#endif // _MJX_CLANG
         if (!_Ptr) { // allocation failed, raise an exception
             allocation_failure::raise();
         }
