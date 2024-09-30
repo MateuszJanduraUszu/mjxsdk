@@ -1,0 +1,42 @@
+// native_allocator.hpp
+
+// Copyright (c) Mateusz Jandura. All rights reserved.
+// SPDX-License-Identifier: Apache-2.0
+
+#pragma once
+#ifndef _MJXSDK_NATIVE_ALLOCATOR_HPP_
+#define _MJXSDK_NATIVE_ALLOCATOR_HPP_
+#include <mjxsdk/allocator.hpp>
+#include <mjxsdk/export.hpp>
+
+namespace mjx {
+    class _MJXSDK_EXPORT native_allocator : public allocator { // stateless memory allocator
+    public:
+        using value_type      = allocator::value_type;
+        using size_type       = allocator::size_type;
+        using difference_type = allocator::difference_type;
+        using pointer         = allocator::pointer;
+
+        native_allocator() noexcept;
+        native_allocator(const native_allocator& _Other) noexcept;
+        native_allocator(native_allocator&& _Other) noexcept;
+        ~native_allocator() noexcept override;
+
+        native_allocator& operator=(const native_allocator& _Other) noexcept;
+        native_allocator& operator=(native_allocator&& _Other) noexcept;
+
+        // allocates uninitialized storage with optional alignment
+        pointer allocate(size_type _Count, const size_type _Align = 0) override;
+
+        // deallocates storage with optional alignment
+        void deallocate(pointer _Ptr, size_type _Count, const size_type _Align = 0) noexcept override;
+
+        // returns the largest supported allocation size
+        size_type max_size() const noexcept override;
+
+        // compares for equality with another allocator
+        bool is_equal(const allocator& _Other) const noexcept override;
+    };
+} // namespace mjx
+
+#endif // _MJXSDK_NATIVE_ALLOCATOR_HPP_

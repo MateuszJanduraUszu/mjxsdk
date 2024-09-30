@@ -10,16 +10,19 @@ set(MJXSDK_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/core.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/exception.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/export.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/native_allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/version.hpp"
 )
 set(MJXSDK_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/allocator.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/exception.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/native_allocator.cpp"
 )
 set(MJXSDK_IMPL_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/assert.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/dllmain.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/tinywin.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/utils.hpp"    
 )
 set(MJXSDK_RES_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/res/mjxsdk.rc"
