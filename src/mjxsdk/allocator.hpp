@@ -50,6 +50,10 @@ namespace mjx {
 
     template <class _Alloc>
     concept compatible_allocator = is_compatible_allocator_v<_Alloc>;
+
+    _MJXSDK_EXPORT allocator& get_global_allocator() noexcept;
+    _MJXSDK_EXPORT void set_global_allocator(allocator& _New_al) noexcept;
+    _MJXSDK_EXPORT void reset_global_allocator() noexcept;
 } // namespace mjx
 
 #endif // _MJXSDK_ALLOCATOR_HPP_

@@ -21,6 +21,7 @@ set(MJXSDK_SRC_FILES
 set(MJXSDK_IMPL_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/assert.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/dllmain.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/global_allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/tinywin.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/utils.hpp"    
 )
