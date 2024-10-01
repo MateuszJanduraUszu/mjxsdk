@@ -11,6 +11,7 @@ set(MJXSDK_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/exception.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/export.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/native_allocator.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/object_allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/version.hpp"
 )
 set(MJXSDK_SRC_FILES
