@@ -26,6 +26,7 @@ add_isolated_test(test_allocators_compatibility "src/allocators_compatibility/te
 add_isolated_test(test_architecture_validation "src/architecture_validation/test.cpp")
 add_isolated_test(test_global_allocator "src/global_allocator/test.cpp")
 add_isolated_test(test_native_allocator "src/native_allocator/test.cpp")
+add_isolated_test(test_object_allocator "src/object_allocator/test.cpp")
 add_isolated_test(test_version_encoding "src/version_encoding/test.cpp")
 
 # use a custom target to combine all targets into a single one,
@@ -36,6 +37,7 @@ add_custom_target(mjxsdk_and_tests ALL DEPENDS
     test_architecture_validation
     test_global_allocator
     test_native_allocator
+    test_object_allocator
     test_version_encoding
 )
 add_custom_command(TARGET mjxsdk_and_tests POST_BUILD
