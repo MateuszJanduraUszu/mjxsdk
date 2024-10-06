@@ -17,7 +17,7 @@ namespace mjx {
 
         tracking_allocator(tracking_allocator&&) noexcept {}
 
-        ~tracking_allocator() noexcept {}
+        ~tracking_allocator() noexcept override {}
 
         tracking_allocator& operator=(const tracking_allocator&) noexcept {
             return *this;
@@ -62,7 +62,7 @@ namespace mjx {
         }
     };
 
-    static _Size_tracker _Tracker;
+    _Size_tracker _Tracker;
     
     void _Capture_allocation_size(const size_t _Size) noexcept {
         _Tracker._Size = _Size;
