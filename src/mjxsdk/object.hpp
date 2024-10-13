@@ -56,7 +56,7 @@ namespace mjx {
     inline _Ty* create_object_using_allocator(_Alloc& _Al, _Types&&... _Args) {
         // allocate memory for an object using the given allocator, then construct the object in-place
         return ::mjx::construct_object(
-            static_cast<_Ty*>(_Al.allocate(sizeof(_Ty))), ::std::forward<_Types>(_Args)...);
+            ::mjx::allocate_object_using_allocator<_Ty>(_Al), ::std::forward<_Types>(_Args)...);
     }
 
     template <class _Ty, compatible_allocator _Alloc>
