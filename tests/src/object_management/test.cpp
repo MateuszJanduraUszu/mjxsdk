@@ -66,7 +66,7 @@ namespace mjx {
     }
 
     TEST(object_management, create_and_delete_object) {
-        // test object creation and destruction based on the stored values,
+        // test object creation and deletion based on the stored values,
         // which are initialized when the object is constructed
         _Object_with_members* const _Obj = ::mjx::create_object<_Object_with_members>(true, 'X', 1024);
         EXPECT_EQ(_Obj->_Mem0, true);
@@ -76,7 +76,7 @@ namespace mjx {
     }
 
     TEST(object_management, create_and_delete_object_array) {
-        // test array of objects creation and destruction based on the stored values,
+        // test array of objects creation and deletion based on the stored values,
         // which are initialized when the objects are constructed
         constexpr size_t _Array_size       = 8;
         _Object_with_members* const _Array = ::mjx::create_object_array<_Object_with_members>(_Array_size);

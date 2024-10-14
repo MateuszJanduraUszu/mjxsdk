@@ -28,13 +28,13 @@ namespace mjx {
     }
 
     template <class _Ty, compatible_allocator _Alloc>
-    inline _Ty* allocate_object_using_allocator(_Alloc& _Al) {
+    [[nodiscard]] inline _Ty* allocate_object_using_allocator(_Alloc& _Al) {
         // allocate memory for an object using the given allocator
         return static_cast<_Ty*>(_Al.allocate(sizeof(_Ty)));
     }
     
     template <class _Ty, compatible_allocator _Alloc>
-    inline _Ty* allocate_object_array_using_allocator(const size_t _Count, _Alloc& _Al) {
+    [[nodiscard]] inline _Ty* allocate_object_array_using_allocator(const size_t _Count, _Alloc& _Al) {
         // allocate memory for an array of objects using the given allocator
         return static_cast<_Ty*>(_Al.allocate(_Count * sizeof(_Ty)));
     }
@@ -53,14 +53,14 @@ namespace mjx {
     }
 
     template <class _Ty, compatible_allocator _Alloc, class... _Types>
-    inline _Ty* create_object_using_allocator(_Alloc& _Al, _Types&&... _Args) {
+    [[nodiscard]] inline _Ty* create_object_using_allocator(_Alloc& _Al, _Types&&... _Args) {
         // allocate memory for an object using the given allocator, then construct the object in-place
         return ::mjx::construct_object(
             ::mjx::allocate_object_using_allocator<_Ty>(_Al), ::std::forward<_Types>(_Args)...);
     }
 
     template <class _Ty, compatible_allocator _Alloc>
-    inline _Ty* create_object_array_using_allocator(const size_t _Count, _Alloc& _Al) {
+    [[nodiscard]] inline _Ty* create_object_array_using_allocator(const size_t _Count, _Alloc& _Al) {
         // allocate memory for an array of objects using the given allocator,
         // then construct the objects in-place
         _Ty* const _Ptr = ::mjx::allocate_object_array_using_allocator<_Ty>(_Count, _Al);
@@ -99,13 +99,13 @@ namespace mjx {
     }
 
     template <class _Ty>
-    inline _Ty* allocate_object() {
+    [[nodiscard]] inline _Ty* allocate_object() {
         // allocate memory for an object using the global allocator
         return ::mjx::allocate_object_using_allocator<_Ty>(::mjx::get_global_allocator());
     }
 
     template <class _Ty>
-    inline _Ty* allocate_object_array(const size_t _Count) {
+    [[nodiscard]] inline _Ty* allocate_object_array(const size_t _Count) {
         // allocate memory for an array of objects using the global allocator
         return ::mjx::allocate_object_array_using_allocator<_Ty>(_Count, ::mjx::get_global_allocator());
     }
@@ -123,15 +123,15 @@ namespace mjx {
     }
 
     template <class _Ty, class... _Types>
-    inline _Ty* create_object(_Types&&... _Args) {
+    [[nodiscard]] inline _Ty* create_object(_Types&&... _Args) {
         // allocate memory for an object using the global allocator, then construct the object in-place
         return ::mjx::create_object_using_allocator<_Ty>(
             ::mjx::get_global_allocator(), ::std::forward<_Types>(_Args)...);
     }
 
     template <class _Ty>
-    inline _Ty* create_object_array(const size_t _Count) {
-        // allocate memory for an array of objects using the given allocator,
+    [[nodiscard]] inline _Ty* create_object_array(const size_t _Count) {
+        // allocate memory for an array of objects using the global allocator,
         // then construct the objects in-place
         return ::mjx::create_object_array_using_allocator<_Ty>(_Count, ::mjx::get_global_allocator());
     }
