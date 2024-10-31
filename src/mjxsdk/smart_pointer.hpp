@@ -415,7 +415,7 @@ namespace mjx {
         shared_array(shared_array&& _Other) noexcept
             : _Myptr(_Other._Myptr), _Mysize(_Other._Mysize), _Myctr(_Other._Myctr) {
             _Other._Myptr  = nullptr;
-            _Other._Mysize = nullptr;
+            _Other._Mysize = 0;
             _Other._Myctr  = nullptr;
         }
 
@@ -493,7 +493,7 @@ namespace mjx {
                 ::mjx::delete_object(_Myctr);
                 _Myptr  = nullptr;
                 _Mysize = 0;
-                _Myctr  = 0;
+                _Myctr  = nullptr;
             }
         }
 
