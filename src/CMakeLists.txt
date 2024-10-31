@@ -13,12 +13,14 @@ set(MJXSDK_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/native_allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/object.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/object_allocator.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/smart_pointer.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/version.hpp"
 )
 set(MJXSDK_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/allocator.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/exception.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/native_allocator.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/smart_pointer.cpp"
 )
 set(MJXSDK_IMPL_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/assert.hpp"
