@@ -28,6 +28,7 @@ add_isolated_test(test_global_allocator "src/global_allocator/test.cpp")
 add_isolated_test(test_native_allocator "src/native_allocator/test.cpp")
 add_isolated_test(test_object_allocator "src/object_allocator/test.cpp")
 add_isolated_test(test_object_management "src/object_management/test.cpp")
+add_isolated_test(test_unique_array "src/unique_array/test.cpp")
 add_isolated_test(test_unique_ptr "src/unique_ptr/test.cpp")
 add_isolated_test(test_version_encoding "src/version_encoding/test.cpp")
 
@@ -41,6 +42,7 @@ add_custom_target(mjxsdk_and_tests ALL DEPENDS
     test_native_allocator
     test_object_allocator
     test_object_management
+    test_unique_array
     test_unique_ptr
     test_version_encoding
 )
