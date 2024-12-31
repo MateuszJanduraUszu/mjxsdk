@@ -527,7 +527,7 @@ namespace mjx {
     template <class _Ty>
     inline shared_array<_Ty> make_shared_array(const size_t _Size) {
         // create a shared array that manages a newly created object array
-        return shared_array<_Ty>(::mjx::create_object_array<_Ty>(_Size));
+        return shared_array<_Ty>(::mjx::create_object_array<_Ty>(_Size), _Size);
     }
 
     template <class _Ty>
