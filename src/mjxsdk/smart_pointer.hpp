@@ -105,6 +105,12 @@ namespace mjx {
     }
 
     template <class _Ty>
+    inline unique_ptr<_Ty> make_unique(const _Ty& _Value) {
+        // create a unique pointer that manages a newly created object
+        return unique_ptr<_Ty>(::mjx::create_object<_Ty>(_Value));
+    }
+
+    template <class _Ty>
     inline unique_ptr<_Ty> make_unique_for_overwrite() {
         // create a unique pointer that manages a newly default-initialized object
         return unique_ptr<_Ty>(::mjx::create_object<_Ty>());
@@ -233,6 +239,17 @@ namespace mjx {
     inline unique_array<_Ty> make_unique_array(const size_t _Size) {
         // create a unique array that manages a newly created object array
         return unique_array<_Ty>(::mjx::create_object_array<_Ty>(_Size), _Size);
+    }
+
+    template <class _Ty>
+    inline unique_array<_Ty> make_unique_array(const size_t _Size, const _Ty& _Value) {
+        // create a unique array that manages a newly created object array, initialized with the given value
+        _Ty* const _Ptr = ::mjx::allocate_object_array<_Ty>(_Size);
+        for (size_t _Idx = 0; _Idx < _Size; ++_Idx) {
+            ::mjx::construct_object(::std::addressof(_Ptr[_Idx]), _Value);
+        }
+        
+        return unique_array<_Ty>(_Ptr, _Size);
     }
 
     class _MJXSDK_EXPORT reference_counter { // thread-safe reference counter
@@ -393,7 +410,7 @@ namespace mjx {
     }
 
     template <class _Ty>
-    class shared_array { // smart array with shared object ownership semantics
+    class shared_array { // smart pointer with shared object ownership semantics for arrays
     public:
         using element_type = _Ty;
         using pointer      = _Ty*;
@@ -537,7 +554,7 @@ namespace mjx {
         for (size_t _Idx = 0; _Idx < _Size; ++_Idx) {
             ::mjx::construct_object(::std::addressof(_Ptr[_Idx]), _Value);
         }
-
+        
         return shared_array<_Ty>(_Ptr, _Size);
     }
 } // namespace mjx

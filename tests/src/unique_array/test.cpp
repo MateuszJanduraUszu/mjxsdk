@@ -126,4 +126,13 @@ namespace mjx {
 
         EXPECT_TRUE(_Caught);
     }
+
+    TEST(unique_array, make_unique_array) {
+        // test value-initialization variant of make_unique_array()
+        constexpr int _Value      = 16384;
+        unique_array<int> _Unique = ::mjx::make_unique_array<int>(128, _Value);
+        for (size_t _Idx = 0; _Idx < _Unique.size(); ++_Idx) {
+            EXPECT_EQ(_Unique[_Idx], _Value);
+        }
+    }
 } // namespace mjx

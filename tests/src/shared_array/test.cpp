@@ -194,4 +194,13 @@ namespace mjx {
 
         EXPECT_TRUE(_Caught);
     }
+
+    TEST(shared_array, make_shared_array) {
+        // test value-initialization variant of make_shared_array()
+        constexpr int _Value      = 262144;
+        shared_array<int> _Shared = ::mjx::make_shared_array<int>(128, _Value);
+        for (size_t _Idx = 0; _Idx < _Shared.size(); ++_Idx) {
+            EXPECT_EQ(_Shared[_Idx], _Value);
+        }
+    }
 } // namespace mjx
