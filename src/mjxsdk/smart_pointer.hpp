@@ -111,7 +111,7 @@ namespace mjx {
     }
 
     template <class _Ty>
-    class unique_array { // smart array with unique object ownership semantics
+    class unique_array { // smart pointer with unique object ownership semantics for arrays
     public:
         using element_type = _Ty;
         using pointer      = _Ty*;
@@ -178,14 +178,14 @@ namespace mjx {
             return _Result;
         }
 
+        void reset() noexcept {
+            _Delete_array();
+        }
+
         void reset(pointer _New_ptr, const size_t _New_size) noexcept {
             _Delete_array(); // delete the managed array
             _Myptr  = _New_ptr;
             _Mysize = _New_size;
-        }
-
-        void reset(::std::nullptr_t = nullptr) noexcept {
-            _Delete_array();
         }
 
         void swap(unique_array& _Other) noexcept {
