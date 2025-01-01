@@ -106,7 +106,7 @@ namespace mjx {
 
     template <class _Ty>
     inline unique_ptr<_Ty> make_unique(const _Ty& _Value) {
-        // create a unique pointer that manages a newly created object
+        // create a unique pointer that manages a newly copy-constructed object
         return unique_ptr<_Ty>(::mjx::create_object<_Ty>(_Value));
     }
 

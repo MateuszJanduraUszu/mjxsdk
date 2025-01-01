@@ -153,4 +153,52 @@ namespace mjx {
         EXPECT_EQ(_Shared0.get(), _Ptr1);
         EXPECT_EQ(_Shared1.get(), _Ptr0);
     }
+
+    struct _Object_type {
+        int _Ix;
+        char _Cx;
+        float _Fx;
+
+        static constexpr int _Default_ix   = 972;
+        static constexpr char _Default_cx  = 'K';
+        static constexpr float _Default_fx = 602.11f;
+
+        _Object_type() noexcept : _Ix(_Default_ix), _Cx(_Default_cx), _Fx(_Default_fx) {}
+
+        explicit _Object_type(const int _Ix, const char _Cx, const float _Fx) noexcept
+            : _Ix(_Ix), _Cx(_Cx), _Fx(_Fx) {}
+    };
+
+    TEST(shared_ptr, make_shared_values) {
+        // test whether _Object_type is constructed with the given values
+        constexpr int _Ix                      = 910;
+        constexpr char _Cx                     = 'T';
+        constexpr float _Fx                    = 1672.02f;
+        const shared_ptr<_Object_type> _Shared = ::mjx::make_shared<_Object_type>(_Ix, _Cx, _Fx);
+        const _Object_type& _Obj               = *_Shared;
+        EXPECT_EQ(_Obj._Ix, _Ix);
+        EXPECT_EQ(_Obj._Cx, _Cx);
+        EXPECT_EQ(_Obj._Fx, _Fx);
+    }
+
+    TEST(shared_ptr, make_shared_copy) {
+        // test whether _Object_type is copy-constructed with the given value
+        constexpr int _Ix                      = 81;
+        constexpr char _Cx                     = 'L';
+        constexpr float _Fx                    = 710.99f;
+        const shared_ptr<_Object_type> _Shared = ::mjx::make_shared<_Object_type>(_Object_type{_Ix, _Cx, _Fx});
+        const _Object_type& _Obj               = *_Shared;
+        EXPECT_EQ(_Obj._Ix, _Ix);
+        EXPECT_EQ(_Obj._Cx, _Cx);
+        EXPECT_EQ(_Obj._Fx, _Fx);
+    }
+
+    TEST(shared_ptr, make_shared_for_overwrite) {
+        // test whether _Object_type is default-constructed
+        const shared_ptr<_Object_type> _Shared = ::mjx::make_shared_for_overwrite<_Object_type>();
+        const _Object_type& _Obj               = *_Shared;
+        EXPECT_EQ(_Obj._Ix, _Object_type::_Default_ix);
+        EXPECT_EQ(_Obj._Cx, _Object_type::_Default_cx);
+        EXPECT_EQ(_Obj._Fx, _Object_type::_Default_fx);
+    }
 } // namespace mjx

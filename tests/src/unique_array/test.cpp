@@ -127,12 +127,42 @@ namespace mjx {
         EXPECT_TRUE(_Caught);
     }
 
-    TEST(unique_array, make_unique_array) {
-        // test value-initialization variant of make_unique_array()
-        constexpr int _Value      = 16384;
-        unique_array<int> _Unique = ::mjx::make_unique_array<int>(128, _Value);
+    struct _Object_type {
+        int _Ix;
+        char _Cx;
+        float _Fx;
+
+        static constexpr int _Default_ix   = 192;
+        static constexpr char _Default_cx  = 'F';
+        static constexpr float _Default_fx = 272.918f;
+
+        _Object_type() noexcept : _Ix(_Default_ix), _Cx(_Default_cx), _Fx(_Default_fx) {}
+
+        explicit _Object_type(const int _Ix, const char _Cx, const float _Fx) noexcept
+            : _Ix(_Ix), _Cx(_Cx), _Fx(_Fx) {}
+    };
+
+    TEST(unique_array, make_unique_array_default) {
+        // test whether _Object_type array is constructed with the default values
+        const unique_array<_Object_type> _Unique = ::mjx::make_unique_array<_Object_type>(64);
         for (size_t _Idx = 0; _Idx < _Unique.size(); ++_Idx) {
-            EXPECT_EQ(_Unique[_Idx], _Value);
+            EXPECT_EQ(_Unique[_Idx]._Ix, _Object_type::_Default_ix);
+            EXPECT_EQ(_Unique[_Idx]._Cx, _Object_type::_Default_cx);
+            EXPECT_EQ(_Unique[_Idx]._Fx, _Object_type::_Default_fx);
+        }
+    }
+
+    TEST(unique_array, make_unique_array_value) {
+        // test whether _Object_type array is constructed with the given values
+        constexpr int _Ix                        = 527;
+        constexpr char _Cx                       = 'Y';
+        constexpr float _Fx                      = 924.002f;
+        const unique_array<_Object_type> _Unique = ::mjx::make_unique_array<_Object_type>(
+            128, _Object_type{_Ix, _Cx, _Fx});
+        for (size_t _Idx = 0; _Idx < _Unique.size(); ++_Idx) {
+            EXPECT_EQ(_Unique[_Idx]._Ix, _Ix);
+            EXPECT_EQ(_Unique[_Idx]._Cx, _Cx);
+            EXPECT_EQ(_Unique[_Idx]._Fx, _Fx);
         }
     }
 } // namespace mjx

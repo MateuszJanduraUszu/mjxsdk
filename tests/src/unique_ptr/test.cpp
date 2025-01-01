@@ -97,27 +97,46 @@ namespace mjx {
         char _Cx;
         float _Fx;
 
-        _Object_type() noexcept : _Ix(56), _Cx('X'), _Fx(12.062) {}
+        static constexpr int _Default_ix   = 56;
+        static constexpr char _Default_cx  = 'X';
+        static constexpr float _Default_fx = 12.062f;
+
+        _Object_type() noexcept : _Ix(_Default_ix), _Cx(_Default_cx), _Fx(_Default_fx) {}
 
         explicit _Object_type(const int _Ix, const char _Cx, const float _Fx) noexcept
             : _Ix(_Ix), _Cx(_Cx), _Fx(_Fx) {}
     };
 
-    TEST(unique_ptr, make_unique) {
+    TEST(unique_ptr, make_unique_values) {
         // test whether _Object_type is constructed with the given values
-        const unique_ptr<_Object_type> _Unique = ::mjx::make_unique<_Object_type>(25, 'Z', 99.052f);
+        constexpr int _Ix                      = 10;
+        constexpr char _Cx                     = 'C';
+        constexpr float _Fx                    = 71.122f;
+        const unique_ptr<_Object_type> _Unique = ::mjx::make_unique<_Object_type>(_Ix, _Cx, _Fx);
         const _Object_type& _Obj               = *_Unique;
-        EXPECT_EQ(_Obj._Ix, 25);
-        EXPECT_EQ(_Obj._Cx, 'Z');
-        EXPECT_EQ(_Obj._Fx, 99.052f);
+        EXPECT_EQ(_Obj._Ix, _Ix);
+        EXPECT_EQ(_Obj._Cx, _Cx);
+        EXPECT_EQ(_Obj._Fx, _Fx);
+    }
+
+    TEST(unique_ptr, make_unique_copy) {
+        // test whether _Object_type is copy-constructed with the given value
+        constexpr int _Ix                      = 1925;
+        constexpr char _Cx                     = 'P';
+        constexpr float _Fx                    = 5290.251f;
+        const unique_ptr<_Object_type> _Unique = ::mjx::make_unique<_Object_type>(_Object_type{_Ix, _Cx, _Fx});
+        const _Object_type& _Obj               = *_Unique;
+        EXPECT_EQ(_Obj._Ix, _Ix);
+        EXPECT_EQ(_Obj._Cx, _Cx);
+        EXPECT_EQ(_Obj._Fx, _Fx);
     }
 
     TEST(unique_ptr, make_unique_for_overwrite) {
         // test whether _Object_type is default-constructed
         const unique_ptr<_Object_type> _Unique = ::mjx::make_unique_for_overwrite<_Object_type>();
         const _Object_type& _Obj               = *_Unique;
-        EXPECT_EQ(_Obj._Ix, 56);
-        EXPECT_EQ(_Obj._Cx, 'X');
-        EXPECT_EQ(_Obj._Fx, 12.062f);
+        EXPECT_EQ(_Obj._Ix, _Object_type::_Default_ix);
+        EXPECT_EQ(_Obj._Cx, _Object_type::_Default_cx);
+        EXPECT_EQ(_Obj._Fx, _Object_type::_Default_fx);
     }
 } // namespace mjx
