@@ -9,8 +9,8 @@
 namespace mjx {
     TEST(unique_array, null_construct) {
         // test default and null construction of unique_array
-        unique_array<int> _Unique0;
-        unique_array<int> _Unique1(nullptr, 0);
+        const unique_array<int> _Unique0;
+        const unique_array<int> _Unique1(nullptr, 0);
         EXPECT_EQ(_Unique0.get(), nullptr);
         EXPECT_EQ(_Unique0.size(), 0);
         EXPECT_EQ(_Unique1.get(), nullptr);
@@ -19,10 +19,10 @@ namespace mjx {
 
     TEST(unique_array, move_construct) {
         // test construction of unique_array from another instance
-        unique_array<int> _Unique0 = ::mjx::make_unique_array<int>(8);
-        const int* const _Ptr      = _Unique0.get();
-        const size_t _Size         = _Unique0.size();
-        unique_array<int> _Unique1 = ::std::move(_Unique0);
+        unique_array<int> _Unique0       = ::mjx::make_unique_array<int>(8);
+        const int* const _Ptr            = _Unique0.get();
+        const size_t _Size               = _Unique0.size();
+        const unique_array<int> _Unique1 = ::std::move(_Unique0);
         EXPECT_EQ(_Unique0.get(), nullptr);
         EXPECT_EQ(_Unique0.size(), 0);
         EXPECT_EQ(_Unique1.get(), _Ptr);
@@ -33,7 +33,7 @@ namespace mjx {
         // test construction of unique_array from a raw pointer and size
         constexpr size_t _Size = 16;
         int* const _Ptr        = ::mjx::create_object_array<int>(_Size);
-        unique_array<int> _Unique(_Ptr, _Size); // destroys _Ptr
+        const unique_array<int> _Unique(_Ptr, _Size); // destroys _Ptr
         EXPECT_EQ(_Unique.get(), _Ptr);
         EXPECT_EQ(_Unique.size(), _Size);
     }
@@ -63,7 +63,7 @@ namespace mjx {
         // test access to the managed array of unique_array
         constexpr size_t _Size = 128;
         int* const _Ptr        = ::mjx::create_object_array<int>(_Size);
-        unique_array<int> _Unique(_Ptr, _Size); // destroys _Ptr
+        const unique_array<int> _Unique(_Ptr, _Size); // destroys _Ptr
         EXPECT_EQ(_Unique.get(), _Ptr);
     }
 
@@ -71,7 +71,7 @@ namespace mjx {
         // test access to the size of the managed array of unique_array
         constexpr size_t _Size = 256;
         int* const _Ptr        = ::mjx::create_object_array<int>(_Size);
-        unique_array<int> _Unique(_Ptr, _Size); // destroys _Ptr
+        const unique_array<int> _Unique(_Ptr, _Size); // destroys _Ptr
         EXPECT_EQ(_Unique.size(), _Size);
     }
 
@@ -116,8 +116,8 @@ namespace mjx {
 
     TEST(unique_array, bounds_checking) {
         // test bounds checking for unique_array
-        unique_array<int> _Unique = ::mjx::make_unique_array<int>(8192);
-        bool _Caught              = false;
+        const unique_array<int> _Unique = ::mjx::make_unique_array<int>(8192);
+        bool _Caught                    = false;
         try {
             (void) _Unique[_Unique.size()]; // intentionally raise resource_overrun exception
         } catch (const resource_overrun&) {

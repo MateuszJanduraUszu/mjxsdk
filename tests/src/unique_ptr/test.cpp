@@ -9,27 +9,26 @@
 namespace mjx {
     TEST(unique_ptr, null_construct) {
         // test default and null construction of unique_ptr
-        unique_ptr<int> _Unique0;
-        unique_ptr<int> _Unique1(nullptr);
+        const unique_ptr<int> _Unique0;
+        const unique_ptr<int> _Unique1(nullptr);
         EXPECT_EQ(_Unique0.get(), nullptr);
         EXPECT_EQ(_Unique1.get(), nullptr);
     }
 
     TEST(unique_ptr, move_construct) {
         // test construction of unique_ptr from another instance
-        constexpr int _Value     = 32;
-        unique_ptr<int> _Unique0 = ::mjx::make_unique<int>(_Value);
-        unique_ptr<int> _Unique1 = ::std::move(_Unique0);
+        unique_ptr<int> _Unique0       = ::mjx::make_unique<int>(32);
+        const int* const _Ptr          = _Unique0.get();
+        const unique_ptr<int> _Unique1 = ::std::move(_Unique0);
         EXPECT_EQ(_Unique0.get(), nullptr);
-        EXPECT_EQ(*_Unique1, _Value);
+        EXPECT_EQ(_Unique1.get(), _Ptr);
     }
 
     TEST(unique_ptr, pointer_construct) {
         // test construction of unique_ptr from a raw pointer
         int* const _Ptr = ::mjx::create_object<int>(64);
-        unique_ptr<int> _Unique(_Ptr); // destroys _Ptr
-        EXPECT_EQ(_Ptr, _Unique.get());
-        EXPECT_EQ(*_Unique, *_Ptr);
+        const unique_ptr<int> _Unique(_Ptr); // destroys _Ptr
+        EXPECT_EQ(_Unique.get(), _Ptr);
     }
 
     TEST(unique_ptr, null_assign) {
@@ -41,23 +40,23 @@ namespace mjx {
 
     TEST(unique_ptr, move_assign) {
         // test move assignment of unique_ptr
-        constexpr int _Value     = 512;
-        unique_ptr<int> _Unique0 = ::mjx::make_unique<int>(_Value);
+        unique_ptr<int> _Unique0 = ::mjx::make_unique<int>(512);
+        const int* const _Ptr    = _Unique0.get();
         unique_ptr<int> _Unique1;
         _Unique1 = ::std::move(_Unique0);
         EXPECT_EQ(_Unique0.get(), nullptr);
-        EXPECT_EQ(*_Unique1, _Value);
+        EXPECT_EQ(_Unique1.get(), _Ptr);
     }
 
     TEST(unique_ptr, dereference) {
         // test dereference of unique_ptr to access managed object
-        int* const _Ptr = ::mjx::create_object<int>(1024);
-        unique_ptr<int> _Unique(_Ptr); // destroys _Ptr
-        EXPECT_EQ(*_Unique, *_Ptr);
+        constexpr int _Value          = 1024;
+        const unique_ptr<int> _Unique = ::mjx::make_unique<int>(_Value);
+        EXPECT_EQ(*_Unique, _Value);
     }
 
     TEST(unique_ptr, get) {
-        // test access to the managed pointer of unique_ptr
+        // test access to the managed object of unique_ptr
         int* const _Ptr = ::mjx::create_object<int>(2048);
         unique_ptr<int> _Unique(_Ptr); // destroys _Ptr
         EXPECT_EQ(_Unique.get(), _Ptr);
@@ -65,18 +64,21 @@ namespace mjx {
 
     TEST(unique_ptr, release) {
         // test release of unique_ptr, transferring ownership
-        constexpr int _Value    = 4096;
-        unique_ptr<int> _Unique = ::mjx::make_unique<int>(_Value);
-        int* const _Ptr         = _Unique.release();
+        int* const _Ptr = ::mjx::create_object<int>(4096);
+        unique_ptr<int> _Unique(_Ptr);
+        const int* const _Released_ptr = _Unique.release();
         EXPECT_EQ(_Unique.get(), nullptr);
-        EXPECT_EQ(*_Ptr, _Value);
+        EXPECT_EQ(_Released_ptr, _Ptr);
+        ::mjx::delete_object(_Ptr);
     }
 
     TEST(unique_ptr, reset) {
-        // test reset of unique_ptr, deleting the managed pointer
-        constexpr int _Value    = 8192;
-        unique_ptr<int> _Unique = ::mjx::make_unique<int>(_Value);
-        EXPECT_EQ(*_Unique, _Value);
+        // test reset of unique_ptr, deleting the managed object
+        int* const _Ptr = ::mjx::create_object<int>(8192);
+        unique_ptr<int> _Unique(_Ptr);
+        EXPECT_EQ(_Unique.get(), _Ptr);
+
+        // calling reset() should destroy the managed object
         _Unique.reset();
         EXPECT_EQ(_Unique.get(), nullptr);
     }

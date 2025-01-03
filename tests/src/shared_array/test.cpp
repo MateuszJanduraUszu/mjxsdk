@@ -9,8 +9,8 @@
 namespace mjx {
     TEST(shared_array, null_construct) {
         // test default and null construction of shared_array
-        shared_array<int> _Shared0;
-        shared_array<int> _Shared1(nullptr, 0);
+        const shared_array<int> _Shared0;
+        const shared_array<int> _Shared1(nullptr, 0);
         EXPECT_EQ(_Shared0.get(), nullptr);
         EXPECT_EQ(_Shared0.size(), 0);
         EXPECT_EQ(_Shared0.use_count(), 0);
@@ -21,8 +21,8 @@ namespace mjx {
 
     TEST(shared_array, copy_construct) {
         // test construction of shared_array from another instance
-        shared_array<int> _Shared0 = ::mjx::make_shared_array<int>(4);
-        shared_array<int> _Shared1 = _Shared0;
+        const shared_array<int> _Shared0 = ::mjx::make_shared_array<int>(4);
+        const shared_array<int> _Shared1 = _Shared0;
         EXPECT_EQ(_Shared0.get(), _Shared1.get());
         EXPECT_EQ(_Shared0.size(), _Shared1.size());
         EXPECT_EQ(_Shared0.use_count(), 2);
@@ -31,8 +31,8 @@ namespace mjx {
 
     TEST(shared_array, move_construct) {
         // test construction of shared_array from another instance
-        shared_array<int> _Shared0 = ::mjx::make_shared_array<int>(8);
-        shared_array<int> _Shared1 = ::std::move(_Shared0);
+        shared_array<int> _Shared0       = ::mjx::make_shared_array<int>(8);
+        const shared_array<int> _Shared1 = ::std::move(_Shared0);
         EXPECT_EQ(_Shared0.get(), nullptr);
         EXPECT_EQ(_Shared0.size(), 0);
         EXPECT_EQ(_Shared0.use_count(), 0);
@@ -45,7 +45,7 @@ namespace mjx {
         // test construction of shared_array from a raw pointer
         constexpr size_t _Size = 16;
         int* const _Ptr        = ::mjx::create_object_array<int>(_Size);
-        shared_array<int> _Shared(_Ptr, _Size); // destroys _Ptr
+        const shared_array<int> _Shared(_Ptr, _Size); // destroys _Ptr
         EXPECT_EQ(_Shared.get(), _Ptr);
         EXPECT_EQ(_Shared.size(), _Size);
         EXPECT_EQ(_Shared.use_count(), 1);
@@ -56,7 +56,7 @@ namespace mjx {
         constexpr size_t _Size = 32;
         int* const _Ptr        = ::mjx::create_object_array<int>(_Size);
         unique_array<int> _Unique(_Ptr, _Size);
-        shared_array<int> _Shared(::std::move(_Unique)); // destroys _Ptr
+        const shared_array<int> _Shared(::std::move(_Unique)); // destroys _Ptr
         EXPECT_EQ(_Unique.get(), nullptr);
         EXPECT_EQ(_Unique.size(), 0);
         EXPECT_EQ(_Shared.get(), _Ptr);
@@ -66,7 +66,7 @@ namespace mjx {
 
     TEST(shared_array, copy_assign) {
         // test copy assignment of shared_array
-        shared_array<int> _Shared0 = ::mjx::make_shared_array<int>(64);
+        const shared_array<int> _Shared0 = ::mjx::make_shared_array<int>(64);
         shared_array<int> _Shared1;
         _Shared1 = _Shared0;
         EXPECT_EQ(_Shared0.get(), _Shared1.get());
@@ -106,24 +106,24 @@ namespace mjx {
         // test access to the managed array of shared_array
         constexpr size_t _Size = 512;
         int* const _Ptr        = ::mjx::create_object_array<int>(_Size);
-        shared_array<int> _Shared(_Ptr, _Size); // destroys _Ptr
+        const shared_array<int> _Shared(_Ptr, _Size); // destroys _Ptr
         EXPECT_EQ(_Shared.get(), _Ptr);
     }
 
     TEST(shared_array, size) {
         // test access to the size of the managed array of shared_array
-        constexpr size_t _Size    = 1024;
-        shared_array<int> _Shared = ::mjx::make_shared_array<int>(_Size);
+        constexpr size_t _Size          = 1024;
+        const shared_array<int> _Shared = ::mjx::make_shared_array<int>(_Size);
         EXPECT_EQ(_Shared.size(), _Size);
     }
 
     TEST(shared_array, use_count) {
         // test managed array access counting of shared_array
-        shared_array<int> _Shared0 = ::mjx::make_shared_array<int>(2048);
+        const shared_array<int> _Shared0 = ::mjx::make_shared_array<int>(2048);
         EXPECT_EQ(_Shared0.use_count(), 1);
         {
-            shared_array<int> _Shared1 = _Shared0;
-            shared_array<int> _Shared2 = _Shared0;
+            const shared_array<int> _Shared1 = _Shared0;
+            const shared_array<int> _Shared2 = _Shared0;
             EXPECT_EQ(_Shared0.use_count(), 3);
         }
 
@@ -133,10 +133,10 @@ namespace mjx {
 
     TEST(shared_array, unique) {
         // test managed array uniqueness of shared_array
-        shared_array<int> _Shared0 = ::mjx::make_shared_array<int>(4096);
+        const shared_array<int> _Shared0 = ::mjx::make_shared_array<int>(4096);
         EXPECT_TRUE(_Shared0.unique());
         {
-            shared_array<int> _Shared1 = _Shared0;
+            const shared_array<int> _Shared1 = _Shared0;
             EXPECT_FALSE(_Shared0.unique());
         }
 
@@ -184,8 +184,8 @@ namespace mjx {
 
     TEST(shared_array, bounds_checking) {
         // test bounds checking for shared_array
-        shared_array<int> _Shared = ::mjx::make_shared_array<int>(131072);
-        bool _Caught              = false;
+        const shared_array<int> _Shared = ::mjx::make_shared_array<int>(131072);
+        bool _Caught                    = false;
         try {
             (void) _Shared[_Shared.size()]; // intentionally raise resource_overrun exception
         } catch (const resource_overrun&) {
