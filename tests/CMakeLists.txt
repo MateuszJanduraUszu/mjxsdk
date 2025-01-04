@@ -24,6 +24,7 @@ endfunction()
 
 add_isolated_test(test_allocators_compatibility "src/allocators_compatibility/test.cpp")
 add_isolated_test(test_architecture_validation "src/architecture_validation/test.cpp")
+add_isolated_test(test_endian "src/endian/test.cpp")
 add_isolated_test(test_global_allocator "src/global_allocator/test.cpp")
 add_isolated_test(test_native_allocator "src/native_allocator/test.cpp")
 add_isolated_test(test_object_allocator "src/object_allocator/test.cpp")
@@ -40,6 +41,7 @@ add_custom_target(mjxsdk_and_tests ALL DEPENDS
     mjxsdk
     test_allocators_compatibility
     test_architecture_validation
+    test_endian
     test_global_allocator
     test_native_allocator
     test_object_allocator
