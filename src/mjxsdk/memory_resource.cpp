@@ -7,6 +7,7 @@
 #include <mjxsdk/impl/global_allocator.hpp>
 #include <mjxsdk/impl/utils.hpp>
 #include <mjxsdk/memory_resource.hpp>
+#include <utility>
 
 namespace mjx {
     memory_resource::memory_resource() noexcept : _Myptr(nullptr), _Mysize(0) {}
