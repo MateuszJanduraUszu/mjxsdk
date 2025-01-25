@@ -11,6 +11,7 @@ set(MJXSDK_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/endian.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/exception.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/export.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory_resource.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/native_allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/object.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/object_allocator.hpp"
@@ -20,6 +21,7 @@ set(MJXSDK_INC_FILES
 set(MJXSDK_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/allocator.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/exception.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory_resource.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/native_allocator.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/smart_pointer.cpp"
 )
