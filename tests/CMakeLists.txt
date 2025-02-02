@@ -22,37 +22,37 @@ function(add_isolated_test test_name test_path)
     add_test(NAME ${test_name} COMMAND ${test_name})
 endfunction()
 
-add_isolated_test(test_allocators_compatibility "src/allocators_compatibility/test.cpp")
-add_isolated_test(test_architecture_validation "src/architecture_validation/test.cpp")
-add_isolated_test(test_endian "src/endian/test.cpp")
-add_isolated_test(test_global_allocator "src/global_allocator/test.cpp")
-add_isolated_test(test_memory_resource "src/memory_resource/test.cpp")
-add_isolated_test(test_native_allocator "src/native_allocator/test.cpp")
-add_isolated_test(test_object_allocator "src/object_allocator/test.cpp")
-add_isolated_test(test_object_management "src/object_management/test.cpp")
-add_isolated_test(test_shared_array "src/shared_array/test.cpp")
-add_isolated_test(test_shared_ptr "src/shared_ptr/test.cpp")
-add_isolated_test(test_unique_array "src/unique_array/test.cpp")
-add_isolated_test(test_unique_ptr "src/unique_ptr/test.cpp")
-add_isolated_test(test_version_encoding "src/version_encoding/test.cpp")
+add_isolated_test(test_core_architecture_validation "src/core/architecture_validation/test.cpp")
+add_isolated_test(test_core_version_encoding "src/core/version_encoding/test.cpp")
+add_isolated_test(test_memory_allocators_compatibility "src/memory/allocators_compatibility/test.cpp")
+add_isolated_test(test_memory_endian "src/memory/endian/test.cpp")
+add_isolated_test(test_memory_global_allocator "src/memory/global_allocator/test.cpp")
+add_isolated_test(test_memory_memory_resource "src/memory/memory_resource/test.cpp")
+add_isolated_test(test_memory_native_allocator "src/memory/native_allocator/test.cpp")
+add_isolated_test(test_memory_object_allocator "src/memory/object_allocator/test.cpp")
+add_isolated_test(test_memory_object_management "src/memory/object_management/test.cpp")
+add_isolated_test(test_memory_shared_array "src/memory/shared_array/test.cpp")
+add_isolated_test(test_memory_shared_ptr "src/memory/shared_ptr/test.cpp")
+add_isolated_test(test_memory_unique_array "src/memory/unique_array/test.cpp")
+add_isolated_test(test_memory_unique_ptr "src/memory/unique_ptr/test.cpp")
 
 # use a custom target to combine all targets into a single one,
 # this allows only one post-build call instead of per-test copying
 add_custom_target(mjxsdk_and_tests ALL DEPENDS
     mjxsdk
-    test_allocators_compatibility
-    test_architecture_validation
-    test_endian
-    test_global_allocator
-    test_memory_resource
-    test_native_allocator
-    test_object_allocator
-    test_object_management
-    test_shared_array
-    test_shared_ptr
-    test_unique_array
-    test_unique_ptr
-    test_version_encoding
+    test_core_architecture_validation
+    test_core_version_encoding
+    test_memory_allocators_compatibility
+    test_memory_endian
+    test_memory_global_allocator
+    test_memory_memory_resource
+    test_memory_native_allocator
+    test_memory_object_allocator
+    test_memory_object_management
+    test_memory_shared_array
+    test_memory_shared_ptr
+    test_memory_unique_array
+    test_memory_unique_ptr
 )
 add_custom_command(TARGET mjxsdk_and_tests POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
