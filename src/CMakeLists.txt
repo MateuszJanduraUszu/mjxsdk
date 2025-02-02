@@ -5,32 +5,37 @@
 
 cmake_minimum_required(VERSION 3.21.0)
 
-set(MJXSDK_INC_FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/allocator.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/core.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/endian.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/exception.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/export.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory_resource.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/native_allocator.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/object.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/object_allocator.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/smart_pointer.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/version.hpp"
+set(MJXSDK_CORE_INC_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/core/export.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/core/macros.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/core/version.hpp"
 )
-set(MJXSDK_SRC_FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/allocator.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/exception.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory_resource.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/native_allocator.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/smart_pointer.cpp"
+set(MJXSDK_CORE_IMPL_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/core/impl/assert.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/core/impl/dllmain.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/core/impl/tinywin.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/core/impl/utils.hpp"
 )
-set(MJXSDK_IMPL_FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/assert.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/dllmain.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/global_allocator.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/tinywin.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/impl/utils.hpp"    
+set(MJXSDK_MEMORY_INC_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/allocator.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/endian.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/exception.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/memory_resource.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/native_allocator.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/object.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/object_allocator.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/smart_pointer.hpp"
+)
+set(MJXSDK_MEMORY_SRC_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/allocator.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/exception.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/memory_resource.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/native_allocator.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/smart_pointer.cpp"
+)
+set(MJXSDK_MEMORY_IMPL_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/impl/global_allocator.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/impl/utils.hpp"
 )
 set(MJXSDK_RES_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/res/mjxsdk.rc"
@@ -105,12 +110,15 @@ if(${is_clang} OR ${is_gcc})
 endif()
 
 # organize source files into directories for better readability
-source_group("src" FILES ${MJXSDK_INC_FILES} ${MJXSDK_SRC_FILES})
-source_group("src/impl" FILES ${MJXSDK_IMPL_FILES})
+source_group("src/core" FILES ${MJXSDK_CORE_INC_FILES})
+source_group("src/core/impl" FILES ${MJXSDK_CORE_IMPL_FILES})
+source_group("src/memory" FILES ${MJXSDK_MEMORY_INC_FILES} ${MJXSDK_MEMORY_SRC_FILES})
+source_group("src/memory/impl" FILES ${MJXSDK_MEMORY_IMPL_FILES})
 source_group("res" FILES ${MJXSDK_RES_FILES})
 
 # add the MJXSDK shared library and adjust its properties
-add_library(mjxsdk SHARED ${MJXSDK_INC_FILES} ${MJXSDK_SRC_FILES} ${MJXSDK_IMPL_FILES})
+add_library(mjxsdk SHARED ${MJXSDK_CORE_INC_FILES} ${MJXSDK_CORE_IMPL_FILES}
+    ${MJXSDK_MEMORY_INC_FILES} ${MJXSDK_MEMORY_SRC_FILES} ${MJXSDK_MEMORY_IMPL_FILES})
 target_compile_definitions(mjxsdk PRIVATE _MJXSDK_BUILD=1 PUBLIC ${MJX_BASE_DEFS})
 target_compile_features(mjxsdk PRIVATE cxx_std_20)
 target_include_directories(mjxsdk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -154,7 +162,8 @@ if(MJXSDK_INSTALL_LIBRARY)
         DESTINATION "cmake/mjxsdk"
         NAMESPACE mjx::
     )
-    install(FILES ${MJXSDK_INC_FILES} DESTINATION "inc/mjxsdk")
+    install(FILES ${MJXSDK_CORE_INC_FILES} DESTINATION "inc/mjxsdk/core")
+    install(FILES ${MJXSDK_MEMORY_INC_FILES} DESTINATION "inc/mjxsdk/memory")
     if(${is_gcc} AND WIN32)
         # copy manually generated mjxsdk.lib to the installation directory
         install(FILES "$<TARGET_FILE_DIR:mjxsdk>/mjxsdk.lib" DESTINATION "bin/$<CONFIG>")
