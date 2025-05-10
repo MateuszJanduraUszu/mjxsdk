@@ -27,7 +27,7 @@ namespace mjx {
             return *this;
         }
 
-        pointer allocate(size_type _Count, const size_type _Align = 0) override {
+        pointer allocate(size_type _Count, size_type _Align = 0) override {
             if (_Align != 0) { // align _Count to the given alignment
                 _Count = (_Count + _Align - 1) & ~(_Align - 1);
             }
@@ -36,7 +36,7 @@ namespace mjx {
             return nullptr;
         }
 
-        void deallocate(pointer, size_type _Count, const size_type _Align = 0) noexcept override {
+        void deallocate(pointer, size_type _Count, size_type _Align = 0) noexcept override {
             if (_Align != 0) { // align _Count to the given alignment
                 _Count = (_Count + _Align - 1) & ~(_Align - 1);
             }
@@ -69,41 +69,43 @@ namespace mjx {
     }
 
     struct _Unaligned_type {
-        char _Padding[3] = {'\0'};
+        uint8_t _Padding[3] = {0};
     };
 
     static_assert(alignof(_Unaligned_type) == 1, "_Unaligned_type alignment mismatch");
     static_assert(sizeof(_Unaligned_type) == 3, "_Unaligned_type size mismatch");
 
-    TEST(object_allocator, unaligned_allocation_size) {
-        // test the allocation of 15 elements, each 3 bytes long, without alignment constraints
+    TEST(object_allocator, type_aligned_allocation_size) {
+        constexpr size_t _Count         = 15;
         constexpr size_t _Expected_size = 45;
         object_allocator<_Unaligned_type> _Al;
-        _Al.allocate(15);
+        _Al.allocate(_Count);
         EXPECT_EQ(_Tracker._Size, _Expected_size);
     }
 
-    TEST(object_allocator, aligned_allocation_size) {
-        // test the allocation of 15 elements, each 3 bytes long, with a 4-byte alignment
-        constexpr size_t _Expected_size = 48;
+    TEST(object_allocator, custom_aligned_allocation_size) {
+        constexpr size_t _Count         = 30;
+        constexpr size_t _Align         = 4;
+        constexpr size_t _Expected_size = 92;
         object_allocator<_Unaligned_type> _Al;
-        _Al.allocate(15, 4);
+        _Al.allocate(_Count, _Align);
         EXPECT_EQ(_Tracker._Size, _Expected_size);
     }
 
-    TEST(object_allocator, unaligned_deallocation_size) {
-        // test the deallocation of 15 elements, each 3 bytes long, without alignment constraints
-        constexpr size_t _Expected_size = 45;
+    TEST(object_allocator, type_aligned_deallocation_size) {
+        constexpr size_t _Count         = 45;
+        constexpr size_t _Expected_size = 135;
         object_allocator<_Unaligned_type> _Al;
-        _Al.deallocate(nullptr, 15);
+        _Al.deallocate(nullptr, _Count);
         EXPECT_EQ(_Tracker._Size, _Expected_size);
     }
 
-    TEST(object_allocator, aligned_deallocation_size) {
-        // test the deallocation of 15 elements, each 3 bytes long, with a 4-byte alignment
-        constexpr size_t _Expected_size = 48;
+    TEST(object_allocator, custom_aligned_deallocation_size) {
+        constexpr size_t _Count         = 60;
+        constexpr size_t _Align         = 8;
+        constexpr size_t _Expected_size = 184;
         object_allocator<_Unaligned_type> _Al;
-        _Al.deallocate(nullptr, 15, 4);
+        _Al.deallocate(nullptr, _Count, _Align);
         EXPECT_EQ(_Tracker._Size, _Expected_size);
     }
 } // namespace mjx
