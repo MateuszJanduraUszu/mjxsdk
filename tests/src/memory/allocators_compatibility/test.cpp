@@ -26,11 +26,11 @@ namespace mjx {
             return *this;
         }
 
-        pointer allocate(size_type, const size_type = 0) override {
+        pointer allocate(size_type, size_type = 0) override {
             return nullptr;
         }
 
-        void deallocate(pointer, size_type, const size_type = 0) noexcept override {}
+        void deallocate(pointer, size_type, size_type = 0) noexcept override {}
 
         size_type max_size() const noexcept override {
             return 0;
@@ -64,11 +64,11 @@ namespace mjx {
             return *this;
         }
 
-        pointer allocate(size_type, const size_type = 0) {
+        pointer allocate(size_type, size_type = 0) {
             return nullptr;
         }
 
-        void deallocate(pointer, size_type, const size_type = 0) noexcept {}
+        void deallocate(pointer, size_type, size_type = 0) noexcept {}
 
         size_type max_size() const noexcept {
             return 0;

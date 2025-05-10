@@ -27,19 +27,21 @@ namespace mjx {
         return *this;
     }
 
-    native_allocator::pointer native_allocator::allocate(size_type _Count, const size_type _Align) {
+    native_allocator::pointer native_allocator::allocate(size_type _Count, size_type _Align) {
         if (_Count == 0) { // no allocation, do nothing
             return nullptr;
         }
 
-        if (_Align != 0) { // align _Count to the given alignment
+        void* _Ptr = nullptr;
+        if (_Align != 0) { // use the given alignment
 #ifdef _DEBUG
             _INTERNAL_ASSERT(mjxsdk_impl::_Is_pow_of_2(_Align), "alignment must be a power of 2");
 #endif // _DEBUG
-            _Count = mjxsdk_impl::_Align_value(_Count, _Align);
+            _Ptr = ::operator new(_Count, static_cast<::std::align_val_t>(_Align), ::std::nothrow);
+        } else { // use the default alignment
+            _Ptr = ::operator new(_Count, ::std::nothrow);
         }
 
-        void* const _Ptr = ::operator new(_Count, ::std::nothrow);
         if (!_Ptr) { // allocation failed, raise an exception
             allocation_failure::raise();
         }
@@ -47,15 +49,17 @@ namespace mjx {
         return _Ptr;
     }
 
-    void native_allocator::deallocate(pointer _Ptr, size_type _Count, const size_type _Align) noexcept {
-        if (_Ptr && _Count > 0) { // non-null memory, deallocate it
-            if (_Align != 0) { // align _Count to the given alignment
-#ifdef _DEBUG
-                _INTERNAL_ASSERT(mjxsdk_impl::_Is_pow_of_2(_Align), "alignment must be a power of 2");
-#endif // _DEBUG
-                _Count = mjxsdk_impl::_Align_value(_Count, _Align);
-            }
+    void native_allocator::deallocate(pointer _Ptr, size_type _Count, size_type _Align) noexcept {
+        if (!_Ptr || _Count == 0) { // invalid block, break
+            return;
+        }
 
+        if (_Align != 0) { // use the given alignment
+#ifdef _DEBUG
+            _INTERNAL_ASSERT(mjxsdk_impl::_Is_pow_of_2(_Align), "alignment must be a power of 2");
+#endif // _DEBUG
+            ::operator delete(_Ptr, _Count, static_cast<::std::align_val_t>(_Align));
+        } else { // use the default alignment
             ::operator delete(_Ptr, _Count);
         }
     }

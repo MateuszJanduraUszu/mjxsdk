@@ -26,10 +26,10 @@ namespace mjx {
         native_allocator& operator=(native_allocator&& _Other) noexcept;
 
         // allocates uninitialized storage with optional alignment
-        pointer allocate(size_type _Count, const size_type _Align = 0) override;
+        pointer allocate(size_type _Count, size_type _Align = 0) override;
 
         // deallocates storage with optional alignment
-        void deallocate(pointer _Ptr, size_type _Count, const size_type _Align = 0) noexcept override;
+        void deallocate(pointer _Ptr, size_type _Count, size_type _Align = 0) noexcept override;
 
         // returns the largest supported allocation size
         size_type max_size() const noexcept override;

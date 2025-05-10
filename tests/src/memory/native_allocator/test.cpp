@@ -7,6 +7,16 @@
 #include <mjxsdk/memory/native_allocator.hpp>
 
 namespace mjx {
+    TEST(native_allocator, aligned_allocation) {
+        constexpr size_t _Count = 1000;
+        constexpr size_t _Align = 64;
+        native_allocator _Al;
+        void* const _Ptr           = _Al.allocate(_Count, _Align);
+        const uintptr_t _Ptr_bytes = reinterpret_cast<uintptr_t>(_Ptr);
+        EXPECT_EQ(_Ptr_bytes % _Align, 0); // address should also be aligned
+        _Al.deallocate(_Ptr, _Count, _Align);
+    }
+
     TEST(native_allocator, max_size) {
         native_allocator _Al;
 #ifdef _MJX_X64

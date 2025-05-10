@@ -25,7 +25,7 @@ namespace mjx {
             return *this;
         }
 
-        pointer allocate(size_type, const size_type = 0) override {
+        pointer allocate(size_type, size_type = 0) override {
             if (_Myctr) {
                 ++*_Myctr;
             }
@@ -33,7 +33,7 @@ namespace mjx {
             return nullptr;
         }
 
-        void deallocate(pointer, size_type, const size_type = 0) noexcept override {
+        void deallocate(pointer, size_type, size_type = 0) noexcept override {
             if (_Myctr) {
                 ++*_Myctr;
             }

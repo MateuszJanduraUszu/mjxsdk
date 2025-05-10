@@ -30,6 +30,9 @@ namespace mjx {
             using other = object_allocator<_Other>;
         };
 
+        // the least alignment required for proper allocation
+        static constexpr size_type required_alignment = alignof(_Ty);
+
         object_allocator() noexcept                        = default;
         object_allocator(const object_allocator&) noexcept = default;
         object_allocator(object_allocator&&) noexcept      = default;
@@ -47,11 +50,12 @@ namespace mjx {
         }
 
         pointer allocate(size_type _Count, const size_type _Align = 0) {
-            return static_cast<pointer>(::mjx::get_global_allocator().allocate(_Count * sizeof(_Ty), _Align));
+            return static_cast<pointer>(
+                ::mjx::get_global_allocator().allocate(_Count * sizeof(_Ty), _Choose_align(_Align)));
         }
 
         void deallocate(pointer _Ptr, size_type _Count, const size_type _Align = 0) noexcept {
-            ::mjx::get_global_allocator().deallocate(_Ptr, _Count * sizeof(_Ty), _Align);
+            ::mjx::get_global_allocator().deallocate(_Ptr, _Count * sizeof(_Ty), _Choose_align(_Align));
         }
 
         size_type max_size() const noexcept {
@@ -60,6 +64,12 @@ namespace mjx {
 
         bool is_equal(const object_allocator&) const noexcept {
             return true; // always equal
+        }
+
+    private:
+        static size_type _Choose_align(const size_t _Align) noexcept {
+            // choose between the required and specified alignment for allocation
+            return _Align > required_alignment ? _Align : required_alignment;
         }
     };
 
