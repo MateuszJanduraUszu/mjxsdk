@@ -131,19 +131,6 @@ namespace mjx {
         EXPECT_EQ(_Shared0.use_count(), 1);
     }
 
-    TEST(shared_array, unique) {
-        // test managed array uniqueness of shared_array
-        const shared_array<int> _Shared0 = ::mjx::make_shared_array<int>(4096);
-        EXPECT_TRUE(_Shared0.unique());
-        {
-            const shared_array<int> _Shared1 = _Shared0;
-            EXPECT_FALSE(_Shared0.unique());
-        }
-
-        // once _Shared1 is destroyed, _Shared0 is unique
-        EXPECT_TRUE(_Shared0.unique());
-    }
-
     TEST(shared_array, reset) {
         // test reset functionality of shared_array
         size_t _Size              = 8192;

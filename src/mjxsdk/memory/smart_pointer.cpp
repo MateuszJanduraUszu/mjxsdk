@@ -23,8 +23,4 @@ namespace mjx {
     long reference_counter::use_count() const noexcept {
         return _Myrefs.load(::std::memory_order_relaxed);
     }
-
-    bool reference_counter::unique() const noexcept {
-        return _Myrefs.load(::std::memory_order_relaxed) == 1;
-    }
 } // namespace mjx
