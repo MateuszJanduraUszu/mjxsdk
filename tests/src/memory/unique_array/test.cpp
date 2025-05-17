@@ -80,11 +80,10 @@ namespace mjx {
         constexpr size_t _Size = 512;
         int* const _Ptr        = ::mjx::create_object_array<int>(_Size);
         unique_array<int> _Unique(_Ptr, _Size);
-        const auto _Pair = _Unique.release();
+        const int* const _Released_ptr = _Unique.release();
         EXPECT_EQ(_Unique.get(), nullptr);
         EXPECT_EQ(_Unique.size(), 0);
-        EXPECT_EQ(_Pair.ptr, _Ptr);
-        EXPECT_EQ(_Pair.size, _Size);
+        EXPECT_EQ(_Released_ptr, _Ptr);
         ::mjx::delete_object_array(_Ptr, _Size);
     }
 

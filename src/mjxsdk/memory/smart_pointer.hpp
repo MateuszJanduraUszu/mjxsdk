@@ -172,16 +172,11 @@ namespace mjx {
             return _Mysize;
         }
 
-        struct release_result {
-            pointer ptr;
-            size_t size;
-        };
-
-        release_result release() noexcept {
-            release_result _Result = {_Myptr, _Mysize};
-            _Myptr                 = nullptr;
-            _Mysize                = 0;
-            return _Result;
+        pointer release() noexcept {
+            pointer _Old_ptr = _Myptr;
+            _Myptr           = nullptr;
+            _Mysize          = 0;
+            return _Old_ptr;
         }
 
         void reset() noexcept {
