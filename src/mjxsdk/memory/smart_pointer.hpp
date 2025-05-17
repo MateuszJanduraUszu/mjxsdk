@@ -266,9 +266,6 @@ namespace mjx {
         // returns the number of references
         long use_count() const noexcept;
 
-        // checks whether the number of references is exactly 1
-        bool unique() const noexcept;
-
     private:
         ::std::atomic<long> _Myrefs;
     };
@@ -337,10 +334,6 @@ namespace mjx {
 
         long use_count() const noexcept {
             return _Myctr ? _Myctr->use_count() : 0;
-        }
-
-        bool unique() const noexcept {
-            return _Myctr ? _Myctr->unique() : false;
         }
 
         void reset() noexcept {
@@ -477,10 +470,6 @@ namespace mjx {
 
         long use_count() const noexcept {
             return _Myctr ? _Myctr->use_count() : 0;
-        }
-
-        bool unique() const noexcept {
-            return _Myctr ? _Myctr->unique() : false;
         }
 
         void reset() noexcept {
