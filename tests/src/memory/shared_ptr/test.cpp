@@ -7,6 +7,48 @@
 #include <mjxsdk/memory/smart_pointer.hpp>
 
 namespace mjx {
+    struct _Incomplete_type;
+
+    struct _Non_empty_type {
+        int _Obj;
+
+        void _Func() const noexcept {}
+    };
+
+    TEST(shared_ptr, valid_element_type) {
+        // test valid element types for shared_ptr
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<bool>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<const char>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<volatile short>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<const volatile int>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<void*>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<void* const>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<const long*>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<const long* const>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<volatile long long*>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<volatile long long* const>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<const volatile float*>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<const volatile float* const>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<double(*)(void*)>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<long double(*)[]>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<int _Non_empty_type::*>);
+        EXPECT_TRUE(mjxsdk_impl::_Valid_smart_ptr_element<void(_Non_empty_type::*)()>);
+    }
+
+    TEST(shared_ptr, invalid_element_type) {
+        // test invalid element types for shared_ptr
+        EXPECT_FALSE(mjxsdk_impl::_Valid_smart_ptr_element<void>);
+        EXPECT_FALSE(mjxsdk_impl::_Valid_smart_ptr_element<bool&>);
+        EXPECT_FALSE(mjxsdk_impl::_Valid_smart_ptr_element<const char&>);
+        EXPECT_FALSE(mjxsdk_impl::_Valid_smart_ptr_element<volatile short&>);
+        EXPECT_FALSE(mjxsdk_impl::_Valid_smart_ptr_element<const volatile int&>);
+        EXPECT_FALSE(mjxsdk_impl::_Valid_smart_ptr_element<long[]>);
+        EXPECT_FALSE(mjxsdk_impl::_Valid_smart_ptr_element<long long[4]>);
+        EXPECT_FALSE(mjxsdk_impl::_Valid_smart_ptr_element<float()>);
+        EXPECT_FALSE(mjxsdk_impl::_Valid_smart_ptr_element<double(long double)>);
+        EXPECT_FALSE(mjxsdk_impl::_Valid_smart_ptr_element<_Incomplete_type>);
+    }
+
     TEST(shared_ptr, null_construct) {
         // test default and null construction of shared_ptr
         const shared_ptr<int> _Shared0;

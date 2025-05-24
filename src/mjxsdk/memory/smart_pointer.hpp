@@ -13,9 +13,20 @@
 #include <utility>
 
 namespace mjx {
+    namespace mjxsdk_impl {
+        template <class _Ty>
+        concept _Valid_smart_ptr_element = !::std::is_array_v<_Ty> && requires {
+            static_cast<_Ty*>(nullptr); // must be a valid pointer type (_Ty*)
+            sizeof(_Ty); // must be a complete type (sizeof(incomplete_type) is ill-formed)
+        };
+    } // namespace mjxsdk_impl
+
     template <class _Ty>
     class unique_ptr { // smart pointer with unique object ownership semantics
     public:
+        static_assert(mjxsdk_impl::_Valid_smart_ptr_element<_Ty>,
+            "Invalid element type for unique_ptr<T>.");
+
         using element_type = _Ty;
         using pointer      = _Ty*;
 
@@ -119,6 +130,9 @@ namespace mjx {
     template <class _Ty>
     class unique_array { // smart pointer with unique object ownership semantics for arrays
     public:
+        static_assert(mjxsdk_impl::_Valid_smart_ptr_element<_Ty>,
+            "Invalid element type for unique_array<T>.");
+
         using element_type = _Ty;
         using pointer      = _Ty*;
 
@@ -273,6 +287,9 @@ namespace mjx {
     template <class _Ty>
     class shared_ptr { // smart pointer with shared object ownership semantics
     public:
+        static_assert(mjxsdk_impl::_Valid_smart_ptr_element<_Ty>,
+            "Invalid element type for shared_ptr<T>.");
+
         using element_type = _Ty;
         using pointer      = _Ty*;
 
@@ -400,6 +417,9 @@ namespace mjx {
     template <class _Ty>
     class shared_array { // smart pointer with shared object ownership semantics for arrays
     public:
+        static_assert(mjxsdk_impl::_Valid_smart_ptr_element<_Ty>,
+            "Invalid element type for shared_array<T>.");
+
         using element_type = _Ty;
         using pointer      = _Ty*;
 
