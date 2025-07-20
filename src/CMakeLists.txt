@@ -34,6 +34,7 @@ set(MJXSDK_MEMORY_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/smart_pointer.cpp"
 )
 set(MJXSDK_MEMORY_IMPL_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/impl/debug_block.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/impl/global_allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/impl/utils.hpp"
 )

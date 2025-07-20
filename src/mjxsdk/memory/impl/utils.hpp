@@ -20,6 +20,11 @@ namespace mjx {
             // check whether the memory block is within the base memory block
             return _Block_begin >= _Base_begin && _Block_end <= _Base_end;
         }
+
+        constexpr size_t _Get_effective_alignment(const size_t _Align) noexcept {
+            // returns the effective alignment for allocation and deallocation
+            return _Align >= __STDCPP_DEFAULT_NEW_ALIGNMENT__ ? _Align : __STDCPP_DEFAULT_NEW_ALIGNMENT__;
+        }
     } // namespace mjxsdk_impl
 } // namespace mjx
 

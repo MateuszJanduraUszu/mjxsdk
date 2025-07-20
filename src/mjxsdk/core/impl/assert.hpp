@@ -15,15 +15,17 @@
 
 // generic assertion macros, useful in debug mode
 #ifdef _MJX_WINDOWS
-#define _REPORT_ERROR(_Msg) ::_CrtDbgReport(_CRT_ERROR, __FILE__, __LINE__, nullptr, _Msg)
+#define _REPORT_ERROR(_Fmt, ...) \
+    ::_CrtDbgReport(_CRT_ERROR, __FILE__, __LINE__, nullptr, _Fmt, __VA_ARGS__)
 #else // ^^^ _MJX_WINDOWS ^^^ / vvv _MJX_LINUX vvv
-#define _REPORT_ERROR(_Msg)                                                              \
-    ::fprintf(stderr, "%s:%d: %s: %s\n", __FILE__, __LINE__, __PRETTY_FUNCTION__, _Msg); \
+#define _REPORT_ERROR(_Fmt, ...)                                               \
+    ::fprintf(stderr, "%s:%d: %s: ", __FILE__, __LINE__, __PRETTY_FUNCTION__); \
+    ::fprintf(stderr, _Fmt, __VA_ARGS__);                                      \
     ::abort()
 #endif // _MJX_WINDOWS
 
-#define _INTERNAL_ASSERT(_Cond, _Msg) \
-    if (!(_Cond)) {                   \
-        _REPORT_ERROR(_Msg);          \
+#define _INTERNAL_ASSERT(_Cond, _Fmt, ...) \
+    if (!(_Cond)) {                        \
+        _REPORT_ERROR(_Fmt, __VA_ARGS__);  \
     }
 #endif // _MJXSDK_CORE_IMPL_ASSERT_HPP_
