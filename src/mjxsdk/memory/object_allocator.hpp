@@ -58,6 +58,10 @@ namespace mjx {
             ::mjx::get_global_allocator().deallocate(_Ptr, _Count * sizeof(_Ty), _Choose_align(_Align));
         }
 
+        allocator_tag tag() const noexcept {
+            return ::mjx::get_global_allocator().tag();
+        }
+
         size_type max_size() const noexcept {
             return ::mjx::get_global_allocator().max_size() / sizeof(_Ty);
         }

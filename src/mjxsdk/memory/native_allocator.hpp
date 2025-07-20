@@ -31,11 +31,24 @@ namespace mjx {
         // deallocates storage with optional alignment
         void deallocate(pointer _Ptr, size_type _Count, size_type _Align = 0) noexcept override;
 
+        // returns the tag that identifies the allocator type
+        allocator_tag tag() const noexcept override;
+
         // returns the largest supported allocation size
         size_type max_size() const noexcept override;
 
         // compares for equality with another allocator
         bool is_equal(const allocator& _Other) const noexcept override;
+
+    private:
+#ifdef _DEBUG
+        // allocates unintialized storage with optional alignment for debug mode
+        static pointer _Allocate_debug(const size_type _Count, const size_type _Align);
+
+        // deallocates storage with optional alignment for debug mode
+        static void _Deallocate_debug(
+            pointer _Ptr, const size_type _Count, const size_type _Align) noexcept;
+#endif // _DEBUG
     };
 } // namespace mjx
 

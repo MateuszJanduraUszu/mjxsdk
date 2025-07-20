@@ -7,7 +7,7 @@
 #include <mjxsdk/memory/object_allocator.hpp>
 
 namespace mjx {
-    void _Capture_allocation_size(const size_t _Size) noexcept;
+    void _Capture_allocation_size(const size_t) noexcept;
 
     class tracking_allocator : public allocator {
     public:
@@ -42,6 +42,10 @@ namespace mjx {
             }
 
             _Capture_allocation_size(_Count);
+        }
+
+        allocator_tag tag() const noexcept override {
+            return allocator_tag{0xFF};
         }
 
         size_type max_size() const noexcept override {

@@ -25,6 +25,7 @@ endfunction()
 add_isolated_test(test_core_architecture_validation "src/core/architecture_validation/test.cpp")
 add_isolated_test(test_core_version_encoding "src/core/version_encoding/test.cpp")
 add_isolated_test(test_memory_allocators_compatibility "src/memory/allocators_compatibility/test.cpp")
+add_isolated_test(test_memory_debug_memory_block "src/memory/debug_memory_block/test.cpp")
 add_isolated_test(test_memory_endian "src/memory/endian/test.cpp")
 add_isolated_test(test_memory_global_allocator "src/memory/global_allocator/test.cpp")
 add_isolated_test(test_memory_memory_resource "src/memory/memory_resource/test.cpp")
@@ -43,6 +44,7 @@ add_custom_target(mjxsdk_and_tests ALL DEPENDS
     test_core_architecture_validation
     test_core_version_encoding
     test_memory_allocators_compatibility
+    test_memory_debug_memory_block
     test_memory_endian
     test_memory_global_allocator
     test_memory_memory_resource

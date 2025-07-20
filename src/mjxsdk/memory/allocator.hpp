@@ -12,6 +12,11 @@
 #include <type_traits>
 
 namespace mjx {
+    enum class allocator_tag : unsigned char {
+        unknown = 0,
+        native  = 1
+    };
+
     class _MJXSDK_EXPORT _MJX_NOVTABLE allocator { // base class for all allocators
     public:
         using value_type      = void;
@@ -32,6 +37,9 @@ namespace mjx {
 
         // deallocates storage with optional alignment
         virtual void deallocate(pointer _Ptr, size_type _Count, size_type _Align = 0) noexcept = 0;
+
+        // returns the tag that identifies the allocator type
+        virtual allocator_tag tag() const noexcept = 0;
 
         // returns the largest supported allocation size
         virtual size_type max_size() const noexcept = 0;

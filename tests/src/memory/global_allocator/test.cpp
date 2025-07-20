@@ -39,6 +39,14 @@ namespace mjx {
             }
         }
 
+        allocator_tag tag() const noexcept override {
+            if (_Myctr) {
+                ++*_Myctr;
+            }
+
+            return allocator_tag{0xFF};
+        }
+
         size_type max_size() const noexcept override {
             if (_Myctr) {
                 ++*_Myctr;
@@ -64,7 +72,7 @@ namespace mjx {
     };
 
     TEST(global_allocator, use_custom_allocator) {
-        constexpr size_t _Expected_counter = 4;
+        constexpr size_t _Expected_counter = 5;
         size_t _Counter                    = 0;
         custom_allocator _Al;
         _Al.set_counter(_Counter);
@@ -74,6 +82,7 @@ namespace mjx {
         allocator& _Global_al = ::mjx::get_global_allocator();
         _Global_al.allocate(0);
         _Global_al.deallocate(nullptr, 0);
+        _Global_al.tag();
         _Global_al.max_size();
         _Global_al.is_equal(_Al);
         EXPECT_EQ(_Counter, _Expected_counter);

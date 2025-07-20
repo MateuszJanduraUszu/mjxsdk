@@ -17,6 +17,11 @@ namespace mjx {
         _Al.deallocate(_Ptr, _Count, _Align);
     }
 
+    TEST(native_allocator, tag) {
+        native_allocator _Al;
+        EXPECT_EQ(_Al.tag(), allocator_tag::native);
+    }
+
     TEST(native_allocator, max_size) {
         native_allocator _Al;
 #ifdef _MJX_X64
