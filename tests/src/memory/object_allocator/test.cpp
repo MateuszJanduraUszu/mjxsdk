@@ -72,43 +72,43 @@ namespace mjx {
         _Tracker._Size = _Size;
     }
 
-    struct _Unaligned_type {
-        uint8_t _Padding[3] = {0};
+    struct alignas(32) _Aligned_type {
+        uint8_t _Block[64] = {0};
     };
 
-    static_assert(alignof(_Unaligned_type) == 1, "_Unaligned_type alignment mismatch");
-    static_assert(sizeof(_Unaligned_type) == 3, "_Unaligned_type size mismatch");
+    static_assert(alignof(_Aligned_type) == 32, "_Aligned_type alignment mismatch");
+    static_assert(sizeof(_Aligned_type) == 64, "_Aligned_type size mismatch");
 
     TEST(object_allocator, type_aligned_allocation_size) {
-        constexpr size_t _Count         = 15;
-        constexpr size_t _Expected_size = 45;
-        object_allocator<_Unaligned_type> _Al;
+        constexpr size_t _Count         = 4;
+        constexpr size_t _Expected_size = 256;
+        object_allocator<_Aligned_type> _Al;
         _Al.allocate(_Count);
         EXPECT_EQ(_Tracker._Size, _Expected_size);
     }
 
     TEST(object_allocator, custom_aligned_allocation_size) {
-        constexpr size_t _Count         = 30;
-        constexpr size_t _Align         = 4;
-        constexpr size_t _Expected_size = 92;
-        object_allocator<_Unaligned_type> _Al;
+        constexpr size_t _Count         = 7;
+        constexpr size_t _Align         = 128;
+        constexpr size_t _Expected_size = 512;
+        object_allocator<_Aligned_type> _Al;
         _Al.allocate(_Count, _Align);
         EXPECT_EQ(_Tracker._Size, _Expected_size);
     }
 
     TEST(object_allocator, type_aligned_deallocation_size) {
-        constexpr size_t _Count         = 45;
-        constexpr size_t _Expected_size = 135;
-        object_allocator<_Unaligned_type> _Al;
+        constexpr size_t _Count         = 15;
+        constexpr size_t _Expected_size = 960;
+        object_allocator<_Aligned_type> _Al;
         _Al.deallocate(nullptr, _Count);
         EXPECT_EQ(_Tracker._Size, _Expected_size);
     }
 
     TEST(object_allocator, custom_aligned_deallocation_size) {
-        constexpr size_t _Count         = 60;
-        constexpr size_t _Align         = 8;
-        constexpr size_t _Expected_size = 184;
-        object_allocator<_Unaligned_type> _Al;
+        constexpr size_t _Count         = 21;
+        constexpr size_t _Align         = 256;
+        constexpr size_t _Expected_size = 1536;
+        object_allocator<_Aligned_type> _Al;
         _Al.deallocate(nullptr, _Count, _Align);
         EXPECT_EQ(_Tracker._Size, _Expected_size);
     }
