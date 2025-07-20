@@ -138,10 +138,9 @@ namespace mjx {
             }
 
             // place underrun and overrun sentinels to detect memory boundary violations
+            _Copy_dest_at(_Block, &_Sentinel, _Sentinel_size, _Block_offset::_Underrun_sentinel(_Align));
             _Copy_dest_at(
-                _Block, &_Sentinel, _Sentinel_size, _Block_offset::_Underrun_sentinel(_Align));
-            _Copy_dest_at(_Block, &_Sentinel,
-                _Sentinel_size, _Block_offset::_Overrun_sentinel(_User_size, _Align));
+                _Block, &_Sentinel, _Sentinel_size, _Block_offset::_Overrun_sentinel(_User_size, _Align));
 
             _Padding = _Calculate_block_padding_size(_Block_size, _User_size, _Align);
             if (_Padding > 0) { // fill block padding with 'BF' (Block Fill)
@@ -176,8 +175,8 @@ namespace mjx {
             constexpr size_t _Sentinel_size = sizeof(_Block_sentinel);
             _Block_metadata _Meta;
             _Copy_src_at(&_Meta._Header, _Block, _Block_header_size, _Block_offset::_Header);
-            _Copy_src_at(&_Meta._Underrun_sentinel,
-                _Block, _Sentinel_size, _Block_offset::_Underrun_sentinel(_Align));
+            _Copy_src_at(
+                &_Meta._Underrun_sentinel, _Block, _Sentinel_size, _Block_offset::_Underrun_sentinel(_Align));
             _Copy_src_at(&_Meta._Overrun_sentinel,
                 _Block, _Sentinel_size, _Block_offset::_Overrun_sentinel(_Size, _Align));
             return _Meta;
