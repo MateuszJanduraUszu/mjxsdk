@@ -1,11 +1,11 @@
-// debug_memory_block.hpp
+// debug_block.hpp
 
 // Copyright (c) Mateusz Jandura. All rights reserved.
 // SPDX-License-Identifier: Apache-2.0
 
 #pragma once
-#ifndef _MJXSDK_MEMORY_IMPL_DEBUG_MEMORY_BLOCK_HPP_
-#define _MJXSDK_MEMORY_IMPL_DEBUG_MEMORY_BLOCK_HPP_
+#ifndef _MJXSDK_MEMORY_IMPL_DEBUG_BLOCK_HPP_
+#define _MJXSDK_MEMORY_IMPL_DEBUG_BLOCK_HPP_
 #ifdef _DEBUG
 #include <cstdint>
 #include <mjxsdk/core/impl/assert.hpp>
@@ -253,4 +253,4 @@ namespace mjx {
 } // namespace mjx
 
 #endif // _DEBUG
-#endif // _MJXSDK_MEMORY_IMPL_DEBUG_MEMORY_BLOCK_HPP_
+#endif // _MJXSDK_MEMORY_IMPL_DEBUG_BLOCK_HPP_

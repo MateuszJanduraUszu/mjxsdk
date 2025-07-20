@@ -31,7 +31,8 @@ namespace mjx {
         };
 
         // the least alignment required for proper allocation
-        static constexpr size_type required_alignment = alignof(_Ty);
+        static constexpr size_type required_alignment = alignof(_Ty) > __STDCPP_DEFAULT_NEW_ALIGNMENT__
+            ? alignof(_Ty) : __STDCPP_DEFAULT_NEW_ALIGNMENT__;
 
         object_allocator() noexcept                        = default;
         object_allocator(const object_allocator&) noexcept = default;
@@ -71,7 +72,7 @@ namespace mjx {
         }
 
     private:
-        static size_type _Choose_align(const size_t _Align) noexcept {
+        static constexpr size_type _Choose_align(const size_t _Align) noexcept {
             // choose between the required and specified alignment for allocation
             return _Align > required_alignment ? _Align : required_alignment;
         }

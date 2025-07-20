@@ -33,10 +33,10 @@ namespace mjx {
         allocator& operator=(allocator&& _Other) noexcept;
 
         // allocates uninitialized storage with optional alignment
-        virtual pointer allocate(size_type _Count, size_type _Align = 0) = 0;
+        virtual pointer allocate(size_type _Size, size_type _Align = 0) = 0;
 
         // deallocates storage with optional alignment
-        virtual void deallocate(pointer _Ptr, size_type _Count, size_type _Align = 0) noexcept = 0;
+        virtual void deallocate(pointer _Ptr, size_type _Size, size_type _Align = 0) noexcept = 0;
 
         // returns the tag that identifies the allocator type
         virtual allocator_tag tag() const noexcept = 0;

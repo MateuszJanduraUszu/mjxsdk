@@ -5,7 +5,7 @@
 
 #ifdef  _DEBUG
 #include <gtest/gtest.h>
-#include <mjxsdk/memory/impl/debug_memory_block.hpp>
+#include <mjxsdk/memory/impl/debug_block.hpp>
 #include <mjxsdk/memory/smart_pointer.hpp>
 
 namespace mjx {
@@ -28,7 +28,7 @@ namespace mjx {
         EXPECT_EQ(_Meta._Header._State, mjxsdk_impl::_Block_state::_Allocated);
     }
 
-    TEST(debug_memory_block, block_size) {
+    TEST(debug_block, block_size) {
 #ifdef _MJX_X64
         _Test_block_size(128, 2, 154);
         _Test_block_size(4096, 8, 4128);
@@ -43,7 +43,7 @@ namespace mjx {
         _Test_block_size(0xFFFF'0000, 512, 0xFFFF'0400);
     }
 
-    TEST(debug_memory_block, prepare_block) {
+    TEST(debug_block, prepare_block) {
         _Test_prepare_block(37, 1, allocator_tag{20});
         _Test_prepare_block(64, 32, allocator_tag{52});
         _Test_prepare_block(511, 128, allocator_tag{143});
