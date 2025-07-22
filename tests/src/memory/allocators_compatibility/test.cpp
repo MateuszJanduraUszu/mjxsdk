@@ -8,21 +8,21 @@
 #include <mjxsdk/memory/system_allocator.hpp>
 
 namespace mjx {
-    class compatible_allocator : public allocator {
+    class comp_allocator : public allocator { // allocator that is compatible with the built-in allocators
     public:
-        compatible_allocator() noexcept {}
+        comp_allocator() noexcept {}
         
-        compatible_allocator(const compatible_allocator&) noexcept {}
+        comp_allocator(const comp_allocator&) noexcept {}
 
-        compatible_allocator(compatible_allocator&&) noexcept {}
+        comp_allocator(comp_allocator&&) noexcept {}
 
-        ~compatible_allocator() noexcept override {}
+        ~comp_allocator() noexcept override {}
 
-        compatible_allocator& operator=(const compatible_allocator&) noexcept {
+        comp_allocator& operator=(const comp_allocator&) noexcept {
             return *this;
         }
 
-        compatible_allocator& operator=(compatible_allocator&&) noexcept {
+        comp_allocator& operator=(comp_allocator&&) noexcept {
             return *this;
         }
 
@@ -45,26 +45,26 @@ namespace mjx {
         }
     };
 
-    class incompatible_allocator {
+    class incomp_allocator { // allocator that is incompatible with the built-in allocators
     public:
         using value_type      = void;
         using size_type       = size_t;
         using difference_type = ptrdiff_t;
         using pointer         = void*;
 
-        incompatible_allocator() noexcept {}
+        incomp_allocator() noexcept {}
         
-        incompatible_allocator(const incompatible_allocator&) noexcept {}
+        incomp_allocator(const incomp_allocator&) noexcept {}
 
-        incompatible_allocator(incompatible_allocator&&) noexcept {}
+        incomp_allocator(incomp_allocator&&) noexcept {}
 
-        ~incompatible_allocator() noexcept {}
+        ~incomp_allocator() noexcept {}
 
-        incompatible_allocator& operator=(const incompatible_allocator&) noexcept {
+        incomp_allocator& operator=(const incomp_allocator&) noexcept {
             return *this;
         }
 
-        incompatible_allocator& operator=(incompatible_allocator&&) noexcept {
+        incomp_allocator& operator=(incomp_allocator&&) noexcept {
             return *this;
         }
 
@@ -92,7 +92,7 @@ namespace mjx {
     }
 
     TEST(allocators_compatibility, custom_allocators) {
-        EXPECT_TRUE(is_compatible_allocator_v<compatible_allocator>);
-        EXPECT_FALSE(is_compatible_allocator_v<incompatible_allocator>);
+        EXPECT_TRUE(is_compatible_allocator_v<comp_allocator>);
+        EXPECT_FALSE(is_compatible_allocator_v<incomp_allocator>);
     }
 } // namespace mjx
