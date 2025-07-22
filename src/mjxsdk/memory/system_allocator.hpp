@@ -1,29 +1,29 @@
-// native_allocator.hpp
+// system_allocator.hpp
 
 // Copyright (c) Mateusz Jandura. All rights reserved.
 // SPDX-License-Identifier: Apache-2.0
 
 #pragma once
-#ifndef _MJXSDK_MEMORY_NATIVE_ALLOCATOR_HPP_
-#define _MJXSDK_MEMORY_NATIVE_ALLOCATOR_HPP_
+#ifndef _MJXSDK_MEMORY_SYSTEM_ALLOCATOR_HPP_
+#define _MJXSDK_MEMORY_SYSTEM_ALLOCATOR_HPP_
 #include <mjxsdk/core/export.hpp>
 #include <mjxsdk/memory/allocator.hpp>
 
 namespace mjx {
-    class _MJXSDK_EXPORT native_allocator : public allocator { // stateless memory allocator
+    class _MJXSDK_EXPORT system_allocator : public allocator { // stateless memory allocator
     public:
         using value_type      = allocator::value_type;
         using size_type       = allocator::size_type;
         using difference_type = allocator::difference_type;
         using pointer         = allocator::pointer;
 
-        native_allocator() noexcept;
-        native_allocator(const native_allocator& _Other) noexcept;
-        native_allocator(native_allocator&& _Other) noexcept;
-        ~native_allocator() noexcept override;
+        system_allocator() noexcept;
+        system_allocator(const system_allocator& _Other) noexcept;
+        system_allocator(system_allocator&& _Other) noexcept;
+        ~system_allocator() noexcept override;
 
-        native_allocator& operator=(const native_allocator& _Other) noexcept;
-        native_allocator& operator=(native_allocator&& _Other) noexcept;
+        system_allocator& operator=(const system_allocator& _Other) noexcept;
+        system_allocator& operator=(system_allocator&& _Other) noexcept;
 
         // allocates uninitialized storage with optional alignment
         pointer allocate(size_type _Size, size_type _Align = 0) override;
@@ -52,4 +52,4 @@ namespace mjx {
     };
 } // namespace mjx
 
-#endif // _MJXSDK_MEMORY_NATIVE_ALLOCATOR_HPP_
+#endif // _MJXSDK_MEMORY_SYSTEM_ALLOCATOR_HPP_

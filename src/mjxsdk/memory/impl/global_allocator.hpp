@@ -8,7 +8,7 @@
 #define _MJXSDK_MEMORY_IMPL_GLOBAL_ALLOCATOR_HPP_
 #include <atomic>
 #include <mjxsdk/memory/allocator.hpp>
-#include <mjxsdk/memory/native_allocator.hpp>
+#include <mjxsdk/memory/system_allocator.hpp>
 
 namespace mjx {
     namespace mjxsdk_impl {
@@ -39,13 +39,13 @@ namespace mjx {
         private:
             _Global_allocator() noexcept : _Mydef(), _Mycur(&_Mydef) {}
 
-            native_allocator _Mydef; // the default allocator that has no state or associated resource
+            system_allocator _Mydef; // the default allocator that has no state or associated resource
             ::std::atomic<void*> _Mycur; // pointer to the currently used allocator
         };
 
-        inline native_allocator& _Get_internal_allocator() noexcept {
-            // retrieve the singleton native_allocator used for all internal allocations
-            static native_allocator _Al;
+        inline system_allocator& _Get_internal_allocator() noexcept {
+            // retrieve the singleton system_allocator used for all internal allocations
+            static system_allocator _Al;
             return _Al;
         }
     } // namespace mjxsdk_impl

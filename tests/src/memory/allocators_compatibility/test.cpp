@@ -5,10 +5,10 @@
 
 #include <gtest/gtest.h>
 #include <mjxsdk/memory/allocator.hpp>
-#include <mjxsdk/memory/native_allocator.hpp>
+#include <mjxsdk/memory/system_allocator.hpp>
 
 namespace mjx {
-    class comp_allocator : public allocator {
+    class comp_allocator : public allocator { // allocator that is compatible with the built-in allocators
     public:
         comp_allocator() noexcept {}
         
@@ -32,6 +32,10 @@ namespace mjx {
 
         void deallocate(pointer, size_type, size_type = 0) noexcept override {}
 
+        allocator_tag tag() const noexcept override {
+            return allocator_tag{0xFF};
+        }
+
         size_type max_size() const noexcept override {
             return 0;
         }
@@ -41,7 +45,7 @@ namespace mjx {
         }
     };
 
-    class incomp_allocator {
+    class incomp_allocator { // allocator that is incompatible with the built-in allocators
     public:
         using value_type      = void;
         using size_type       = size_t;
@@ -70,6 +74,10 @@ namespace mjx {
 
         void deallocate(pointer, size_type, size_type = 0) noexcept {}
 
+        allocator_tag tag() const noexcept {
+            return allocator_tag{0xFF};
+        }
+
         size_type max_size() const noexcept {
             return 0;
         }
@@ -80,7 +88,7 @@ namespace mjx {
     };
 
     TEST(allocators_compatibility, builtin_allocators) {
-        EXPECT_TRUE(is_compatible_allocator_v<native_allocator>);
+        EXPECT_TRUE(is_compatible_allocator_v<system_allocator>);
     }
 
     TEST(allocators_compatibility, custom_allocators) {

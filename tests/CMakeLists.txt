@@ -29,11 +29,11 @@ add_isolated_test(test_memory_debug_block "src/memory/debug_block/test.cpp")
 add_isolated_test(test_memory_endian "src/memory/endian/test.cpp")
 add_isolated_test(test_memory_global_allocator "src/memory/global_allocator/test.cpp")
 add_isolated_test(test_memory_memory_resource "src/memory/memory_resource/test.cpp")
-add_isolated_test(test_memory_native_allocator "src/memory/native_allocator/test.cpp")
 add_isolated_test(test_memory_object_allocator "src/memory/object_allocator/test.cpp")
 add_isolated_test(test_memory_object_management "src/memory/object_management/test.cpp")
 add_isolated_test(test_memory_shared_array "src/memory/shared_array/test.cpp")
 add_isolated_test(test_memory_shared_ptr "src/memory/shared_ptr/test.cpp")
+add_isolated_test(test_memory_system_allocator "src/memory/system_allocator/test.cpp")
 add_isolated_test(test_memory_unique_array "src/memory/unique_array/test.cpp")
 add_isolated_test(test_memory_unique_ptr "src/memory/unique_ptr/test.cpp")
 
@@ -48,11 +48,11 @@ add_custom_target(mjxsdk_and_tests ALL DEPENDS
     test_memory_endian
     test_memory_global_allocator
     test_memory_memory_resource
-    test_memory_native_allocator
     test_memory_object_allocator
     test_memory_object_management
     test_memory_shared_array
     test_memory_shared_ptr
+    test_memory_system_allocator
     test_memory_unique_array
     test_memory_unique_ptr
 )
