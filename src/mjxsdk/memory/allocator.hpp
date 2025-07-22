@@ -14,7 +14,7 @@
 namespace mjx {
     enum class allocator_tag : unsigned char {
         unknown = 0,
-        native  = 1
+        system  = 1
     };
 
     class _MJXSDK_EXPORT _MJX_NOVTABLE allocator { // base class for all allocators

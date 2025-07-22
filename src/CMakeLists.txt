@@ -21,17 +21,17 @@ set(MJXSDK_MEMORY_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/endian.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/exception.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/memory_resource.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/native_allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/object.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/object_allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/smart_pointer.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/system_allocator.hpp"
 )
 set(MJXSDK_MEMORY_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/allocator.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/exception.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/memory_resource.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/native_allocator.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/smart_pointer.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/system_allocator.cpp"
 )
 set(MJXSDK_MEMORY_IMPL_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/mjxsdk/memory/impl/debug_block.hpp"

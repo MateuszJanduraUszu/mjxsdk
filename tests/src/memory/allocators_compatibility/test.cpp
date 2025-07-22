@@ -5,24 +5,24 @@
 
 #include <gtest/gtest.h>
 #include <mjxsdk/memory/allocator.hpp>
-#include <mjxsdk/memory/native_allocator.hpp>
+#include <mjxsdk/memory/system_allocator.hpp>
 
 namespace mjx {
-    class comp_allocator : public allocator {
+    class compatible_allocator : public allocator {
     public:
-        comp_allocator() noexcept {}
+        compatible_allocator() noexcept {}
         
-        comp_allocator(const comp_allocator&) noexcept {}
+        compatible_allocator(const compatible_allocator&) noexcept {}
 
-        comp_allocator(comp_allocator&&) noexcept {}
+        compatible_allocator(compatible_allocator&&) noexcept {}
 
-        ~comp_allocator() noexcept override {}
+        ~compatible_allocator() noexcept override {}
 
-        comp_allocator& operator=(const comp_allocator&) noexcept {
+        compatible_allocator& operator=(const compatible_allocator&) noexcept {
             return *this;
         }
 
-        comp_allocator& operator=(comp_allocator&&) noexcept {
+        compatible_allocator& operator=(compatible_allocator&&) noexcept {
             return *this;
         }
 
@@ -31,6 +31,10 @@ namespace mjx {
         }
 
         void deallocate(pointer, size_type, size_type = 0) noexcept override {}
+
+        allocator_tag tag() const noexcept override {
+            return allocator_tag{0xFF};
+        }
 
         size_type max_size() const noexcept override {
             return 0;
@@ -41,26 +45,26 @@ namespace mjx {
         }
     };
 
-    class incomp_allocator {
+    class incompatible_allocator {
     public:
         using value_type      = void;
         using size_type       = size_t;
         using difference_type = ptrdiff_t;
         using pointer         = void*;
 
-        incomp_allocator() noexcept {}
+        incompatible_allocator() noexcept {}
         
-        incomp_allocator(const incomp_allocator&) noexcept {}
+        incompatible_allocator(const incompatible_allocator&) noexcept {}
 
-        incomp_allocator(incomp_allocator&&) noexcept {}
+        incompatible_allocator(incompatible_allocator&&) noexcept {}
 
-        ~incomp_allocator() noexcept {}
+        ~incompatible_allocator() noexcept {}
 
-        incomp_allocator& operator=(const incomp_allocator&) noexcept {
+        incompatible_allocator& operator=(const incompatible_allocator&) noexcept {
             return *this;
         }
 
-        incomp_allocator& operator=(incomp_allocator&&) noexcept {
+        incompatible_allocator& operator=(incompatible_allocator&&) noexcept {
             return *this;
         }
 
@@ -69,6 +73,10 @@ namespace mjx {
         }
 
         void deallocate(pointer, size_type, size_type = 0) noexcept {}
+
+        allocator_tag tag() const noexcept {
+            return allocator_tag{0xFF};
+        }
 
         size_type max_size() const noexcept {
             return 0;
@@ -80,11 +88,11 @@ namespace mjx {
     };
 
     TEST(allocators_compatibility, builtin_allocators) {
-        EXPECT_TRUE(is_compatible_allocator_v<native_allocator>);
+        EXPECT_TRUE(is_compatible_allocator_v<system_allocator>);
     }
 
     TEST(allocators_compatibility, custom_allocators) {
-        EXPECT_TRUE(is_compatible_allocator_v<comp_allocator>);
-        EXPECT_FALSE(is_compatible_allocator_v<incomp_allocator>);
+        EXPECT_TRUE(is_compatible_allocator_v<compatible_allocator>);
+        EXPECT_FALSE(is_compatible_allocator_v<incompatible_allocator>);
     }
 } // namespace mjx
