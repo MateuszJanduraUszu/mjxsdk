@@ -96,32 +96,22 @@ namespace mjx {
             return _Block_size - _Block_offset::_Block_padding(_User_size, _Align);
         }
 
-        inline void* _Move_ptr(void* const _Ptr, const intptr_t _Off) noexcept {
-            // moves the pointer by the given offset (forward or backward)
-            return static_cast<void*>(static_cast<unsigned char*>(_Ptr) + _Off);
-        }
-
-        inline const void* _Move_ptr(const void* const _Ptr, const intptr_t _Off) noexcept {
-            // moves the pointer by the given offset (forward or backward)
-            return static_cast<const void*>(static_cast<const unsigned char*>(_Ptr) + _Off);
-        }
-
         inline void _Fill_at(
             void* const _Dest, const size_t _Size, const intptr_t _Off, const int _Value) noexcept {
             // fills _Size bytes at (_Dest + _Off) with _Value
-            ::memset(_Move_ptr(_Dest, _Off), _Value, _Size);
+            ::memset(_Adjust_address_by_offset(_Dest, _Off), _Value, _Size);
         }
 
         inline void _Copy_dest_at(
             void* const _Dest, const void* const _Src, const size_t _Size, const size_t _Off) noexcept {
             // copies _Size bytes from _Src to (_Dest + _Off)
-            ::memcpy(_Move_ptr(_Dest, _Off), _Src, _Size);
+            ::memcpy(_Adjust_address_by_offset(_Dest, _Off), _Src, _Size);
         }
 
         inline void _Copy_src_at(
             void* const _Dest, const void* const _Src, const size_t _Size, const size_t _Off) noexcept {
             // copies _Size bytes from (_Src + _Off) to _Dest
-            ::memcpy(_Dest, _Move_ptr(_Src, _Off), _Size);
+            ::memcpy(_Dest, _Adjust_address_by_offset(_Src, _Off), _Size);
         }
 
         void* _Prepare_block(void* const _Block, const size_t _Block_size,
@@ -147,7 +137,7 @@ namespace mjx {
                 _Fill_at(_Block, _Padding, _Block_offset::_Block_padding(_User_size, _Align), 0xBF);
             }
 
-            return _Move_ptr(_Block, _Block_offset::_User_block(_Align));
+            return _Adjust_address_by_offset(_Block, _Block_offset::_User_block(_Align));
         }
 
         void _Validate_block_state(
@@ -185,7 +175,7 @@ namespace mjx {
         void* _Extract_and_validate_block(void* const _Ptr, const size_t _Size,
             const size_t _Align, const allocator_tag _Tag) noexcept {
             // extracts the original block from the user pointer and validates its metadata and integrity
-            void* const _Block    = _Move_ptr(_Ptr, -_Block_offset::_User_block(_Align));
+            void* const _Block    = _Adjust_address_by_offset(_Ptr, -_Block_offset::_User_block(_Align));
             _Block_metadata _Meta = _Extract_metadata(_Block, _Size, _Align);
             if (_Meta._Header._Size != _Size) { // report size mismatch
                 _REPORT_ERROR("Corrupted block at 0x%p. Size is %zu, but should be %zu.",
