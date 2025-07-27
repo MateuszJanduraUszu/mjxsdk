@@ -51,6 +51,7 @@ namespace mjx {
         using size_type       = size_t;
         using difference_type = ptrdiff_t;
         using pointer         = void*;
+        using const_pointer   = const void*;
 
         incomp_allocator() noexcept {}
         

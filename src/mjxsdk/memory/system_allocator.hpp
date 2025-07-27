@@ -16,6 +16,7 @@ namespace mjx {
         using size_type       = allocator::size_type;
         using difference_type = allocator::difference_type;
         using pointer         = allocator::pointer;
+        using const_pointer   = allocator::const_pointer;
 
         system_allocator() noexcept;
         system_allocator(const system_allocator& _Other) noexcept;

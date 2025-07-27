@@ -94,7 +94,7 @@ namespace mjx {
         // test checking whether the resource contains a specific memory block
         constexpr size_t _Size = 8192;
         const memory_resource _Res(_Size);
-        unsigned char* const _Address = static_cast<unsigned char*>(_Res.data());
+        const unsigned char* const _Address = static_cast<const unsigned char*>(_Res.data());
         EXPECT_FALSE(_Res.contains(nullptr, 0));
         EXPECT_FALSE(_Res.contains(_Address, 0));
         EXPECT_FALSE(_Res.contains(nullptr, 2048));
