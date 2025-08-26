@@ -10,18 +10,30 @@
 #include <utility>
 
 namespace mjx {
-    memory_resource::memory_resource() noexcept : _Myptr(nullptr), _Mysize(0) {}
+    memory_resource::memory_resource() noexcept : _Myptr(nullptr), _Mysize(0), _Myowns(false) {}
 
-    memory_resource::memory_resource(const memory_resource& _Other) : _Myptr(nullptr), _Mysize(0) {
+    memory_resource::memory_resource(
+        const memory_resource& _Other) : _Myptr(nullptr), _Mysize(0), _Myowns(false) {
         _Copy_resource(_Other._Myptr, _Other._Mysize);
     }
 
-    memory_resource::memory_resource(memory_resource&& _Other) noexcept : _Myptr(nullptr), _Mysize(0) {
-        _Move_resource(_Other._Myptr, _Other._Mysize);
+    memory_resource::memory_resource(
+        memory_resource&& _Other) noexcept : _Myptr(nullptr), _Mysize(0), _Myowns(false) {
+        _Move_resource(_Other);
     }
 
     memory_resource::memory_resource(const size_type _Size)
-        : _Myptr(mjxsdk_impl::_Get_internal_allocator().allocate(_Size)), _Mysize(_Size) {}
+        : _Myptr(mjxsdk_impl::_Get_internal_allocator().allocate(_Size)),
+        _Mysize(_Size), _Myowns(_Size > 0) {}
+
+    memory_resource::memory_resource(pointer _Ptr, const size_type _Size) noexcept
+        : _Myptr(_Ptr), _Mysize(_Size), _Myowns(false) {
+        // reset both pointer and size if either is null or zero
+        if (!_Myptr || _Mysize == 0) {
+            _Myptr  = nullptr;
+            _Mysize = 0;
+        }
+    }
 
     memory_resource::~memory_resource() noexcept {
         destroy();
@@ -39,7 +51,7 @@ namespace mjx {
     memory_resource& memory_resource::operator=(memory_resource&& _Other) noexcept {
         if (this != &_Other) {
             destroy();
-            _Move_resource(_Other._Myptr, _Other._Mysize);
+            _Move_resource(_Other);
         }
 
         return *this;
@@ -48,14 +60,17 @@ namespace mjx {
     void memory_resource::_Copy_resource(const_pointer _Ptr, const size_type _Size) {
         _Myptr  = mjxsdk_impl::_Get_internal_allocator().allocate(_Size);
         _Mysize = _Size;
+        _Myowns = true;
         ::memcpy(_Myptr, _Ptr, _Size);
     }
 
-    void memory_resource::_Move_resource(pointer& _Ptr, size_type& _Size) noexcept {
-        _Myptr  = _Ptr;
-        _Mysize = _Size;
-        _Ptr    = nullptr;
-        _Size   = 0;
+    void memory_resource::_Move_resource(memory_resource& _Resource) noexcept {
+        _Myptr            = _Resource._Myptr;
+        _Mysize           = _Resource._Mysize;
+        _Myowns           = _Resource._Myowns;
+        _Resource._Myptr  = nullptr;
+        _Resource._Mysize = 0;
+        _Resource._Myowns = false;
     }
 
     bool memory_resource::empty() const noexcept {
@@ -74,8 +89,20 @@ namespace mjx {
         return _Mysize;
     }
 
+    bool memory_resource::owns() const noexcept {
+        return _Myowns;
+    }
+
     bool memory_resource::contains(const_pointer _Block, const size_type _Size) const noexcept {
-        if (empty() || !_Block || _Size == 0) {
+        if (!_Myptr || _Mysize == 0) { // an empty resource cannot contain anything
+            return false;
+        }
+
+        if (_Size == 0) { // a zero-length block is always considered contained
+            return true;
+        }
+
+        if (!_Block) { // a non-zero null block is invalid
             return false;
         }
 
@@ -87,18 +114,16 @@ namespace mjx {
     void memory_resource::swap(memory_resource& _Other) noexcept {
         ::std::swap(_Myptr, _Other._Myptr);
         ::std::swap(_Mysize, _Other._Mysize);
-    }
-
-    memory_resource::release_result memory_resource::release() noexcept {
-        const release_result _Result = {_Myptr, _Mysize};
-        _Myptr                       = nullptr;
-        _Mysize                      = 0;
-        return _Result;
+        ::std::swap(_Myowns, _Other._Myowns);
     }
 
     void memory_resource::destroy() noexcept {
         if (_Myptr && _Mysize > 0) {
-            mjxsdk_impl::_Get_internal_allocator().deallocate(_Myptr, _Mysize);
+            if (_Myowns) { // deallocate the block only if is owned
+                mjxsdk_impl::_Get_internal_allocator().deallocate(_Myptr, _Mysize);
+                _Myowns = false;
+            }
+
             _Myptr  = nullptr;
             _Mysize = 0;
         }
